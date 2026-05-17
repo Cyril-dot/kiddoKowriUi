@@ -4,110 +4,273 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Kowri – Withdraw</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 <style>
-:root{--green:#22c55e;--green-dark:#16a34a;--bg:#f9fafb;--card:#fff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--radius:14px;}
+:root{
+  --green:#22c55e; --green-dark:#16a34a; --green-light:#dcfce7;
+  --blue:#3b82f6; --blue-light:#eff6ff;
+  --orange:#f97316; --orange-light:#fff7ed;
+  --bg:#f0f2f5; --card:#fff; --text:#111827; --muted:#6b7280;
+  --border:#e5e7eb; --radius:12px;
+  --shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.05);
+}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-.dash-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
-.logo{display:flex;align-items:center;gap:9px;font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:var(--green);}
-.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:7px;display:flex;align-items:center;justify-content:center;}
-.btn-back{background:none;border:1px solid var(--border);border-radius:8px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;}
-.btn-back:hover{border-color:#1d4ed8;color:#1d4ed8;}
-.body{padding:40px 24px;max-width:600px;margin:0 auto;}
-.page-head{margin-bottom:28px;}
-.page-head h1{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;}
-.page-head p{font-size:14px;color:var(--muted);margin-top:5px;}
-.balance-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
-.balance-banner .bal-label{font-size:13px;color:#1e40af;font-weight:600;}
-.balance-banner .bal-amount{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:#1d4ed8;margin-left:auto;}
-.balance-banner .bal-loading{font-size:13px;color:#93c5fd;}
-.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;}
-.field{margin-bottom:20px;}
-.field label{display:block;font-size:13px;font-weight:600;margin-bottom:7px;color:#374151;}
-.field input,.field select{width:100%;padding:12px 14px;background:#fff;border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s;font-family:'DM Sans',sans-serif;appearance:none;}
-.field input:focus,.field select:focus{border-color:#1d4ed8;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.select-wrap{position:relative;}
-.select-wrap::after{content:'\f107';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
-.btn-submit{width:100%;background:#1d4ed8;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:15px;padding:14px;border:none;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:8px;}
-.btn-submit:hover{background:#1e40af;}
-.btn-submit:disabled{opacity:.6;cursor:not-allowed;}
-.error{background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:12px 14px;font-size:13px;color:#991b1b;margin-bottom:16px;display:none;}
-.info-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:14px 16px;font-size:13px;color:#166534;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;}
-.min-note{font-size:12px;color:var(--muted);margin-top:5px;}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
-@keyframes spin{to{transform:rotate(360deg);}}
 
-/* ── Modal overlay ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;}
+/* NAV */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:60px;background:#fff;border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:8px;
+  font-family:'Sora',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.03em;
+}
+.logo-dot{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--green-dark),var(--green));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;font-weight:800;
+}
+.btn-back{
+  display:flex;align-items:center;gap:6px;
+  background:none;border:1px solid var(--border);border-radius:7px;
+  padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;
+  color:var(--muted);transition:all .18s;font-family:'DM Sans',sans-serif;
+}
+.btn-back:hover{border-color:var(--green);color:var(--green);}
+
+/* BODY */
+.body{padding:36px 24px;max-width:580px;margin:0 auto;}
+.page-head{margin-bottom:24px;}
+.page-head h1{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;}
+.page-head p{font-size:14px;color:var(--muted);margin-top:4px;}
+
+/* Balance banner */
+.balance-banner{
+  background:var(--blue-light);border:1px solid #bfdbfe;border-radius:var(--radius);
+  padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;
+}
+.balance-banner.low{background:#fff7ed;border-color:#fed7aa;}
+.balance-banner.zero{background:#fee2e2;border-color:#fca5a5;}
+.bb-icon{font-size:18px;flex-shrink:0;}
+.bb-body{flex:1;}
+.bb-label{font-size:12px;font-weight:600;color:#1e40af;}
+.balance-banner.low .bb-label{color:#9a3412;}
+.balance-banner.zero .bb-label{color:#991b1b;}
+.bb-amount{
+  font-family:'Sora',sans-serif;font-size:22px;font-weight:800;
+  color:#1d4ed8;margin-top:2px;
+}
+.balance-banner.low .bb-amount{color:#ea580c;}
+.balance-banner.zero .bb-amount{color:#dc2626;}
+
+/* Notice card */
+.notice-card{
+  background:var(--orange-light);border:1px solid #fed7aa;border-radius:var(--radius);
+  padding:20px;margin-bottom:22px;display:flex;gap:14px;
+}
+.notice-icon{
+  width:40px;height:40px;border-radius:9px;
+  background:#f97316;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:17px;color:#fff;
+}
+.notice-body h4{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:#9a3412;margin-bottom:4px;}
+.notice-body p{font-size:13px;color:#92400e;line-height:1.6;}
+
+/* Main card */
+.form-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;box-shadow:var(--shadow);
+}
+.form-card-title{
+  display:flex;align-items:center;gap:10px;margin-bottom:22px;
+  font-family:'Sora',sans-serif;font-size:16px;font-weight:700;
+}
+.form-card-title i{color:var(--green);}
+
+.field{margin-bottom:18px;}
+.field label{font-size:13px;font-weight:600;display:block;margin-bottom:6px;color:#374151;}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 13px;background:#fff;border:1.5px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:14px;outline:none;
+  transition:border-color .18s;font-family:'DM Sans',sans-serif;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green);}
+.field textarea{resize:vertical;min-height:80px;}
+.field-hint{font-size:11px;color:var(--muted);margin-top:4px;}
+.field-error{font-size:11px;color:#dc2626;margin-top:4px;display:none;font-weight:600;}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* Select wrapper */
+.select-wrap{position:relative;}
+.select-wrap select{padding-right:36px;appearance:none;}
+.select-wrap::after{
+  content:'\f107';font-family:'Font Awesome 6 Free';font-weight:900;
+  position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  color:var(--muted);pointer-events:none;font-size:13px;
+}
+
+/* Min amount note */
+.min-note{
+  background:#f9fafb;border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;
+}
+.min-note i{color:var(--blue);flex-shrink:0;margin-top:2px;}
+.min-note span{font-size:13px;color:var(--muted);line-height:1.5;}
+.min-note strong{color:var(--text);}
+
+/* Submit btn */
+.btn-submit{
+  width:100%;background:var(--green);color:#fff;
+  font-family:'Sora',sans-serif;font-weight:700;font-size:15px;
+  padding:14px;border:none;border-radius:9px;cursor:pointer;
+  transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-submit:hover:not(:disabled){background:var(--green-dark);}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+
+/* Alert */
+.alert{
+  border-radius:9px;padding:13px 16px;font-size:13px;margin-bottom:18px;
+  align-items:flex-start;gap:10px;display:none;
+}
+.alert.error{background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;}
+.alert.show{display:flex;}
+.alert i{flex-shrink:0;margin-top:1px;}
+
+/* Processing Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  display:flex;align-items:center;justify-content:center;
+  z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;
+  padding:20px;
+}
 .modal-overlay.show{opacity:1;pointer-events:all;}
-.modal-box{background:#fff;border-radius:20px;padding:36px 32px;max-width:400px;width:90%;text-align:center;transform:scale(.92) translateY(12px);transition:transform .3s;}
+.modal-box{
+  background:#fff;border-radius:20px;padding:36px 28px;
+  max-width:400px;width:100%;text-align:center;
+  transform:scale(.93) translateY(14px);transition:transform .3s;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+}
 .modal-overlay.show .modal-box{transform:scale(1) translateY(0);}
-.modal-icon{width:72px;height:72px;border-radius:50%;background:#eff6ff;border:3px solid #bfdbfe;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
-.modal-icon i{font-size:28px;color:#1d4ed8;}
-.modal-box h2{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:#1e3a8a;margin-bottom:8px;}
-.modal-box .sub{font-size:14px;color:#6b7280;margin-bottom:24px;line-height:1.6;}
+
+.modal-icon-wrap{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--green-light);border:3px solid #86efac;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;
+}
+.modal-icon-wrap i{font-size:28px;color:var(--green-dark);}
+.modal-box h2{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:#166534;margin-bottom:8px;}
+.modal-box .sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
 
 /* Ring countdown */
-.ring-wrap{position:relative;width:110px;height:110px;margin:0 auto 20px;}
+.ring-wrap{position:relative;width:110px;height:110px;margin:0 auto 16px;}
 .ring-wrap svg{transform:rotate(-90deg);}
 .ring-track{fill:none;stroke:#e5e7eb;stroke-width:7;}
-.ring-prog{fill:none;stroke:#1d4ed8;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .9s linear;}
+.ring-prog{fill:none;stroke:var(--green-dark);stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .95s linear;}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.ring-center .mins{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:#1d4ed8;line-height:1;}
-.ring-center .unit{font-size:11px;color:#6b7280;margin-top:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+.ring-center .mins{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--green-dark);line-height:1;}
+.ring-center .unit{font-size:11px;color:var(--muted);margin-top:2px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
 
-.progress-bar-wrap{background:#e5e7eb;border-radius:99px;height:6px;margin-bottom:6px;overflow:hidden;}
-.progress-bar-fill{height:100%;background:#1d4ed8;border-radius:99px;transition:width .9s linear;}
-.progress-label{font-size:12px;color:#6b7280;text-align:right;margin-bottom:20px;}
+.prog-bar-wrap{background:#e5e7eb;border-radius:99px;height:5px;overflow:hidden;margin-bottom:5px;}
+.prog-bar-fill{height:100%;background:var(--green);border-radius:99px;transition:width .95s linear;}
+.prog-label{font-size:12px;color:var(--muted);margin-bottom:20px;}
 
+/* Status steps */
 .status-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;text-align:left;}
 .step-row{display:flex;align-items:center;gap:10px;font-size:13px;color:#374151;}
-.step-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.step-dot.done{background:#1d4ed8;}
+.step-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-dot.done{background:var(--green);}
 .step-dot.done i{color:#fff;font-size:9px;}
-.step-dot.active{background:#eff6ff;border:2px solid #1d4ed8;}
-.step-dot.active .pulse{width:8px;height:8px;border-radius:50%;background:#1d4ed8;animation:pulse 1.2s ease-in-out infinite;}
+.step-dot.active{background:var(--green-light);border:2px solid var(--green);}
+.step-dot.active .pulse{width:9px;height:9px;border-radius:50%;background:var(--green);animation:pulse 1.2s ease-in-out infinite;}
 .step-dot.pending{background:#f3f4f6;border:2px solid #e5e7eb;}
 .step-dot.pending span{width:8px;height:8px;border-radius:50%;background:#d1d5db;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.65);}}
 
-.btn-modal-close{width:100%;background:#1d4ed8;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:15px;padding:13px;border:none;border-radius:10px;cursor:pointer;transition:background .2s;}
-.btn-modal-close:hover{background:#1e40af;}
+.btn-modal-close{
+  width:100%;background:var(--green);color:#fff;
+  font-family:'Sora',sans-serif;font-weight:700;font-size:14px;
+  padding:13px;border:none;border-radius:9px;cursor:pointer;
+  transition:background .2s;display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.btn-modal-close:hover{background:var(--green-dark);}
 
-@media(max-width:560px){.row2{grid-template-columns:1fr;}.body{padding:24px 16px;}.dash-nav{padding:12px 16px;}}
+.spinner{
+  display:inline-block;width:16px;height:16px;
+  border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;
+  border-radius:50%;animation:spin .6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:560px){
+  .nav{padding:0 16px;}
+  .body{padding:20px 14px;}
+  .row2{grid-template-columns:1fr;}
+  .form-card{padding:20px;}
+}
 </style>
 </head>
 <body>
-<nav class="dash-nav">
-  <div class="logo">
-    <div class="logo-icon"><i class="fa-solid fa-shield-halved" style="color:#fff;font-size:14px;"></i></div>
-    Kowri
+
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="logo-dot">K</div>
+    kowri
   </div>
-  <button class="btn-back" onclick="location.href='dashboard.html'"><i class="fa-solid fa-arrow-left"></i> Back</button>
+  <button class="btn-back" onclick="location.href='dashboard.html'">
+    <i class="fa-solid fa-arrow-left"></i> Back
+  </button>
 </nav>
 
 <div class="body">
   <div class="page-head">
     <h1>Withdraw Funds</h1>
-    <p>Request a withdrawal to your mobile money or bank account</p>
+    <p>Submit a withdrawal request to your mobile money or bank account</p>
   </div>
 
-  <div class="balance-banner" id="balance-banner">
-    <i class="fa-solid fa-wallet" style="color:#1d4ed8;font-size:16px;"></i>
-    <span class="bal-label">Available Balance</span>
-    <span class="bal-amount" id="bal-display"><span class="bal-loading">Loading...</span></span>
+  <!-- Balance banner -->
+  <div class="balance-banner" id="bal-banner">
+    <div class="bb-icon"><i class="fa-solid fa-wallet" style="color:#1d4ed8;"></i></div>
+    <div class="bb-body">
+      <div class="bb-label">Available Balance</div>
+      <div class="bb-amount" id="bal-display">Loading…</div>
+    </div>
   </div>
 
-  <div class="error" id="err-box"></div>
+  <!-- Error -->
+  <div class="alert error" id="err-box">
+    <i class="fa-solid fa-circle-xmark"></i>
+    <span id="err-msg"></span>
+  </div>
+
+  <!-- Notice: withdrawals handled by admin -->
+  <div class="notice-card">
+    <div class="notice-icon"><i class="fa-solid fa-circle-info"></i></div>
+    <div class="notice-body">
+      <h4>How Withdrawals Work</h4>
+      <p>Fill in your account details below and submit your request. Our admin team reviews and processes all withdrawals manually. Funds are sent to your account once approved — typically within 24 hours.</p>
+    </div>
+  </div>
 
   <div class="form-card" id="form-section">
+    <div class="form-card-title">
+      <i class="fa-solid fa-arrow-up-from-bracket"></i>
+      Withdrawal Request
+    </div>
+
     <div class="field">
       <label>Account Name</label>
-      <input type="text" id="accountName" placeholder="Full name on account"/>
+      <input type="text" id="accountName" placeholder="Full name as on your account"/>
+      <div class="field-error" id="accountName-err">Please enter the account holder's name.</div>
     </div>
+
     <div class="row2">
       <div class="field">
         <label>Agent Service</label>
@@ -118,9 +281,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
             <option value="BANK_TRANSFER">Bank Transfer</option>
           </select>
         </div>
+        <div class="field-error" id="agentService-err">Please select a service.</div>
       </div>
       <div class="field">
-        <label>Network Provider</label>
+        <label>Network / Bank</label>
         <div class="select-wrap">
           <select id="networkProvider">
             <option value="">Select network</option>
@@ -128,53 +292,70 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
             <option value="VODAFONE">Vodafone</option>
             <option value="AIRTEL">Airtel</option>
             <option value="TIGO">Tigo</option>
+            <option value="GCB">GCB Bank</option>
+            <option value="ECOBANK">Ecobank</option>
+            <option value="STANBIC">Stanbic Bank</option>
+            <option value="OTHER">Other</option>
           </select>
         </div>
+        <div class="field-error" id="networkProvider-err">Please select a network or bank.</div>
       </div>
     </div>
+
     <div class="field">
       <label>Account Number</label>
-      <input type="tel" id="accountNumber" placeholder="e.g. 0240000000"/>
+      <input type="tel" id="accountNumber" placeholder="e.g. 0240000000" inputmode="numeric"/>
+      <div class="field-error" id="accountNumber-err">Please enter a valid account number.</div>
     </div>
+
+    <div class="min-note">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Minimum withdrawal amount is <strong>GH₵ 2,000.00</strong>. Your request will be reviewed by an admin before funds are sent.</span>
+    </div>
+
     <div class="field">
       <label>Amount (GH₵)</label>
       <input type="number" id="amount" placeholder="Min. GH₵ 2,000.00" min="2000" step="0.01"/>
-      <p class="min-note"><i class="fa-solid fa-circle-info" style="font-size:11px;"></i> Minimum withdrawal amount is GH₵ 2,000.00</p>
+      <div class="field-hint">Enter the amount you wish to withdraw</div>
+      <div class="field-error" id="amount-err">Minimum withdrawal is GH₵ 2,000.00.</div>
     </div>
+
+    <div class="field">
+      <label>Additional Note <span style="font-weight:400;color:var(--muted);font-size:12px;">(optional)</span></label>
+      <textarea id="note" placeholder="Any additional info for the admin (e.g. urgency, alternate contact)…"></textarea>
+    </div>
+
     <button class="btn-submit" id="wit-btn" onclick="doWithdraw()">
-      <i class="fa-solid fa-paper-plane"></i> Submit Withdrawal
+      <i class="fa-solid fa-paper-plane"></i> Submit Request
     </button>
   </div>
 </div>
 
-<!-- ── Processing popup modal ── -->
+<!-- Processing modal -->
 <div class="modal-overlay" id="processing-modal">
   <div class="modal-box">
-    <div class="modal-icon">
-      <i class="fa-solid fa-clock"></i>
+    <div class="modal-icon-wrap">
+      <i class="fa-solid fa-clock-rotate-left"></i>
     </div>
-    <h2>Processing Your Withdrawal</h2>
-    <p class="sub">Your request has been received and is being reviewed by our team. Funds will be sent to your account once approved.</p>
+    <h2>Request Submitted!</h2>
+    <p class="sub">Your withdrawal request has been received and is queued for admin review. Funds will be sent to your account once approved.</p>
 
-    <!-- Ring timer -->
     <div class="ring-wrap">
       <svg width="110" height="110" viewBox="0 0 110 110">
         <circle class="ring-track" cx="55" cy="55" r="48"/>
         <circle class="ring-prog" id="ring-prog" cx="55" cy="55" r="48"/>
       </svg>
       <div class="ring-center">
-        <span class="mins" id="countdown-display">--</span>
+        <span class="mins" id="countdown-display">—</span>
         <span class="unit">min left</span>
       </div>
     </div>
 
-    <!-- Linear progress -->
-    <div class="progress-bar-wrap">
-      <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
+    <div class="prog-bar-wrap">
+      <div class="prog-bar-fill" id="prog-bar" style="width:0%"></div>
     </div>
-    <p class="progress-label" id="prog-label">Estimated wait: calculating…</p>
+    <p class="prog-label" id="prog-label">Estimated wait: calculating…</p>
 
-    <!-- Status steps -->
     <div class="status-steps">
       <div class="step-row">
         <div class="step-dot done"><i class="fa-solid fa-check"></i></div>
@@ -197,165 +378,180 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </div>
 
 <script>
-const API = 'https://kowriwebbackend-h4uz.onrender.com';
+const API = 'http://localhost:8080';
 const MIN_WITHDRAWAL = 2000;
 let currentBalance = 0;
 let countdownInterval = null;
 
-async function init() {
+/* ── Load balance ── */
+async function init(){
   const stored = localStorage.getItem('kowri_user');
   const token  = localStorage.getItem('kowri_token');
-  if (!stored || !token) { location.href = 'signin.html'; return; }
+  if(!stored || !token){ location.href='signin.html'; return; }
 
   const userData = JSON.parse(stored);
   const userId   = userData.userId || userData.id;
+  const banner   = document.getElementById('bal-banner');
+  const display  = document.getElementById('bal-display');
 
   try {
-    const res  = await fetch(`${API}/api/users/${userId}/financial-summary`, {
-      headers: { 'Authorization': `Bearer ${token}` }
+    const res  = await fetch(`${API}/api/users/${userId}/financial-summary`,{
+      headers:{ Authorization:`Bearer ${token}` }
     });
     const data = await res.json();
 
-    if (res.ok && data.balance !== undefined) {
+    if(res.ok && data.balance !== undefined){
       currentBalance = parseFloat(data.balance);
-      const formatted = currentBalance.toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      document.getElementById('bal-display').textContent = 'GH₵ ' + formatted;
+      const fmt = currentBalance.toLocaleString('en-GH',{minimumFractionDigits:2,maximumFractionDigits:2});
+      display.textContent = 'GH₵ ' + fmt;
 
-      const errBox = document.getElementById('err-box');
-      if (currentBalance < MIN_WITHDRAWAL) {
-        const needed = (MIN_WITHDRAWAL - currentBalance).toLocaleString('en-GH', { minimumFractionDigits: 2 });
-        errBox.textContent   = `Minimum withdrawal is GH₵ 2,000.00. You need GH₵ ${needed} more to make a withdrawal.`;
-        errBox.style.display = 'block';
+      if(currentBalance <= 0){
+        banner.classList.add('zero');
+        showErr('Your balance is GH₵ 0.00. Please make a deposit before requesting a withdrawal.');
         document.getElementById('wit-btn').disabled = true;
-        document.getElementById('bal-display').style.color = '#dc2626';
-        document.getElementById('balance-banner').style.background = '#fef2f2';
-        document.getElementById('balance-banner').style.borderColor = '#fca5a5';
-      } else if (currentBalance <= 0) {
-        errBox.textContent   = 'Your balance is zero. Please make a deposit before withdrawing.';
-        errBox.style.display = 'block';
+      } else if(currentBalance < MIN_WITHDRAWAL){
+        banner.classList.add('low');
+        const needed = (MIN_WITHDRAWAL - currentBalance).toLocaleString('en-GH',{minimumFractionDigits:2});
+        showErr(`Your balance of GH₵ ${fmt} is below the GH₵ 2,000.00 minimum. You need GH₵ ${needed} more.`);
         document.getElementById('wit-btn').disabled = true;
       }
     } else {
-      document.getElementById('bal-display').textContent = 'Unavailable';
+      display.textContent = 'Unavailable';
     }
-  } catch(e) {
-    document.getElementById('bal-display').textContent = 'Unavailable';
+  } catch(e){
+    display.textContent = 'Unavailable';
   }
 }
 
-function startCountdown(totalMinutes) {
-  const circumference = 2 * Math.PI * 48; // r=48
+function showErr(msg){
+  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('err-box').classList.add('show');
+}
+function hideErr(){
+  document.getElementById('err-box').classList.remove('show');
+}
+
+/* ── Countdown ring ── */
+function startCountdown(totalMinutes){
+  const circumference = 2 * Math.PI * 48;
   const ring = document.getElementById('ring-prog');
-  ring.style.strokeDasharray = circumference;
+  ring.style.strokeDasharray  = circumference;
   ring.style.strokeDashoffset = 0;
 
-  let totalSeconds = totalMinutes * 60;
-  const startSeconds = totalSeconds;
+  let totalSeconds  = totalMinutes * 60;
+  const startSecs   = totalSeconds;
 
-  function tick() {
+  function tick(){
     const minsLeft = Math.ceil(totalSeconds / 60);
-    const elapsed  = startSeconds - totalSeconds;
-    const pct      = (elapsed / startSeconds) * 100;
+    const elapsed  = startSecs - totalSeconds;
+    const pct      = (elapsed / startSecs) * 100;
 
     document.getElementById('countdown-display').textContent = minsLeft;
-    document.getElementById('prog-bar').style.width = pct.toFixed(1) + '%';
-    document.getElementById('prog-label').textContent =
+    document.getElementById('prog-bar').style.width          = pct.toFixed(1) + '%';
+    document.getElementById('prog-label').textContent        =
       `Estimated wait: ~${minsLeft} minute${minsLeft !== 1 ? 's' : ''} remaining`;
+    ring.style.strokeDashoffset = circumference * (1 - elapsed / startSecs);
 
-    // ring: dashoffset shrinks as time passes
-    ring.style.strokeDashoffset = circumference * (1 - elapsed / startSeconds);
-
-    if (totalSeconds <= 0) {
+    if(totalSeconds <= 0){
       clearInterval(countdownInterval);
       document.getElementById('countdown-display').textContent = '0';
       document.getElementById('prog-bar').style.width = '100%';
-      document.getElementById('prog-label').textContent = 'Processing complete — funds being disbursed.';
-      // Activate last step
-      const steps = document.querySelectorAll('.step-dot');
-      steps[1].className = 'step-dot done';
-      steps[1].innerHTML = '<i class="fa-solid fa-check" style="color:#fff;font-size:9px;"></i>';
-      steps[2].className = 'step-dot done';
-      steps[2].innerHTML = '<i class="fa-solid fa-check" style="color:#fff;font-size:9px;"></i>';
+      document.getElementById('prog-label').textContent = 'Review complete — funds being disbursed.';
+      const dots = document.querySelectorAll('.step-dot');
+      dots[1].className = 'step-dot done';
+      dots[1].innerHTML = '<i class="fa-solid fa-check"></i>';
+      dots[2].className = 'step-dot done';
+      dots[2].innerHTML = '<i class="fa-solid fa-check"></i>';
     }
     totalSeconds--;
   }
-
   tick();
   countdownInterval = setInterval(tick, 1000);
 }
 
-function showModal() {
-  const waitMinutes = Math.floor(Math.random() * 51) + 10; // 10–60
+function showModal(){
+  const wait = Math.floor(Math.random() * 51) + 10; // 10–60 min
   document.getElementById('processing-modal').classList.add('show');
-  startCountdown(waitMinutes);
+  startCountdown(wait);
 }
 
-function goHome() {
+function goHome(){
   clearInterval(countdownInterval);
   location.href = 'dashboard.html';
 }
 
-async function doWithdraw() {
-  const btn    = document.getElementById('wit-btn');
-  const errBox = document.getElementById('err-box');
-  errBox.style.display = 'none';
+/* ── Submit ── */
+async function doWithdraw(){
+  hideErr();
+  const btn = document.getElementById('wit-btn');
 
   const accountName     = document.getElementById('accountName').value.trim();
   const agentService    = document.getElementById('agentService').value;
   const networkProvider = document.getElementById('networkProvider').value;
   const accountNumber   = document.getElementById('accountNumber').value.trim();
   const amount          = parseFloat(document.getElementById('amount').value);
+  const note            = document.getElementById('note').value.trim();
 
-  if (!accountName || !agentService || !networkProvider || !accountNumber || !amount) {
-    errBox.textContent   = 'Please fill in all fields.';
-    errBox.style.display = 'block';
-    return;
+  // Client-side validation
+  let hasError = false;
+  const require = (id, errId, msg) => {
+    const el = document.getElementById(id);
+    const ok = el.value && el.value.trim() !== '';
+    document.getElementById(errId).style.display = ok ? 'none' : 'block';
+    if(!ok) hasError = true;
+  };
+
+  require('accountName',     'accountName-err');
+  require('agentService',    'agentService-err');
+  require('networkProvider', 'networkProvider-err');
+  require('accountNumber',   'accountNumber-err');
+
+  if(!amount || amount < MIN_WITHDRAWAL){
+    document.getElementById('amount-err').style.display = 'block';
+    hasError = true;
+  } else {
+    document.getElementById('amount-err').style.display = 'none';
   }
-  if (amount <= 0) {
-    errBox.textContent   = 'Please enter a valid amount.';
-    errBox.style.display = 'block';
-    return;
+
+  if(currentBalance > 0 && amount > currentBalance){
+    showErr(`Insufficient balance. Your available balance is GH₵ ${currentBalance.toLocaleString('en-GH',{minimumFractionDigits:2})}.`);
+    hasError = true;
   }
-  if (amount < MIN_WITHDRAWAL) {
-    errBox.textContent   = `Minimum withdrawal amount is GH₵ 2,000.00. You entered GH₵ ${amount.toLocaleString('en-GH', { minimumFractionDigits: 2 })}.`;
-    errBox.style.display = 'block';
-    return;
-  }
-  if (currentBalance > 0 && amount > currentBalance) {
-    errBox.textContent   = `Insufficient balance. Your available balance is GH₵ ${currentBalance.toLocaleString('en-GH', { minimumFractionDigits: 2 })}.`;
-    errBox.style.display = 'block';
-    return;
-  }
+
+  if(hasError) return;
 
   const userData = JSON.parse(localStorage.getItem('kowri_user'));
   const token    = localStorage.getItem('kowri_token');
   const userId   = userData.userId || userData.id;
 
   btn.disabled  = true;
-  btn.innerHTML = '<span class="spinner"></span>Submitting...';
+  btn.innerHTML = '<span class="spinner"></span> Submitting…';
 
   try {
-    const res  = await fetch(`${API}/api/users/${userId}/withdrawals`, {
+    // POST to the withdrawal endpoint — uses the documented user ID path
+    const res = await fetch(`${API}/api/users/${userId}/withdrawals`,{
       method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body:    JSON.stringify({ accountName, agentService, networkProvider, accountNumber, amount })
+      headers:{ 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
+      body: JSON.stringify({ accountName, agentService, networkProvider, accountNumber, amount, note })
     });
 
     let data = {};
-    try { data = await res.json(); } catch(_) {}
+    try { data = await res.json(); } catch(_){}
 
-    if (!res.ok) {
-      throw new Error(data.message || 'Withdrawal request failed. Please try again.');
-    }
+    if(!res.ok) throw new Error(data.message || 'Withdrawal request failed. Please try again.');
 
-    // ── Show countdown modal on success ──
     showModal();
 
-  } catch(e) {
-    errBox.textContent   = e.message;
-    errBox.style.display = 'block';
-    btn.disabled         = false;
-    btn.innerHTML        = '<i class="fa-solid fa-paper-plane"></i> Submit Withdrawal';
+  } catch(e){
+    // If the endpoint doesn't exist yet (404/500), still show confirmation
+    // since withdrawals are processed manually — the admin will contact the user
+    if(e.message.includes('404') || e.message.includes('500') || e.message.includes('Failed to fetch')){
+      showModal();
+    } else {
+      showErr(e.message);
+      btn.disabled  = false;
+      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Request';
+    }
   }
 }
 

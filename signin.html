@@ -15,9 +15,6 @@
   --border:#d1d5db;
   --bg:#f3f4f6;
   --card:#ffffff;
-  --error-bg:#fef2f2;
-  --error-border:#f87171;
-  --error-text:#b91c1c;
 }
 *{ margin:0; padding:0; box-sizing:border-box; }
 body{
@@ -29,7 +26,7 @@ body{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 32px 24px;
 }
 .logo-area{
   display: flex;
@@ -41,11 +38,6 @@ body{
   height: 44px;
   width: auto;
   display: block;
-}
-.logo-area .logo-fallback{
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 .logo-wordmark{
   font-family: 'Sora', sans-serif;
@@ -72,87 +64,132 @@ h2{
   letter-spacing: -0.02em;
 }
 .sub{
-  font-size: 16px;
+  font-size: 15px;
   color: var(--muted);
-  margin-bottom: 36px;
+  margin-bottom: 32px;
+  line-height: 1.5;
 }
-.field{
-  margin-bottom: 28px;
-}
+.field{ margin-bottom: 22px; }
 .field label{
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
-.field input{
-  width: 100%;
-  padding: 14px 16px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  color: var(--text);
-  background: #fff;
-  border: 1.5px solid var(--border);
-  border-radius: 4px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.field input:focus{
-  border-color: var(--green);
-}
-.field input::placeholder{ color: #9ca3af; }
 .field-row{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .field-row label{ margin-bottom: 0; }
 .forgot-link{
-  font-size: 14px;
+  font-size: 13px;
   color: var(--green-dark);
   text-decoration: none;
   font-weight: 500;
 }
 .forgot-link:hover{ text-decoration: underline; }
+.field input{
+  width: 100%;
+  padding: 13px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field input:focus{
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.12);
+}
+.field input::placeholder{ color: #9ca3af; }
+.field input.input-error{
+  border-color: #f87171;
+  box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
+}
+.field-hint{
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 5px;
+  display: none;
+  font-weight: 500;
+}
+.field-hint.show{ display: block; }
+.pass-wrap{ position: relative; }
+.pass-wrap input{ padding-right: 48px; }
+.pass-toggle{
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 15px;
+  padding: 0;
+  transition: color 0.15s;
+  line-height: 1;
+}
+.pass-toggle:hover{ color: var(--green); }
 .remember-row{
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
 }
 .remember-row input[type=checkbox]{
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   accent-color: var(--green);
   cursor: pointer;
+  flex-shrink: 0;
 }
 .remember-row label{
-  font-size: 15px;
+  font-size: 14px;
   color: var(--muted);
   cursor: pointer;
 }
+.banner{
+  border-radius: 4px;
+  padding: 13px 16px;
+  font-size: 14px;
+  margin-bottom: 22px;
+  display: none;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.5;
+}
+.banner i{ margin-top: 1px; flex-shrink: 0; font-size: 15px; }
+.banner-body strong{ display: block; font-weight: 700; margin-bottom: 2px; font-size: 14px; }
+.error-banner{ background: #fef2f2; border-left: 4px solid #f87171; color: #b91c1c; }
+.success-banner{ background: #f0fdf4; border-left: 4px solid var(--green); color: #166534; }
 .btn-submit{
   width: 100%;
   background: #1f2937;
   color: #fff;
   font-family: 'Sora', sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   padding: 15px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.2s;
+  margin-top: 6px;
   letter-spacing: 0.04em;
 }
 .btn-submit:hover{ background: #111827; }
 .btn-submit:disabled{ opacity: 0.6; cursor: not-allowed; }
 .foot{
   text-align: center;
-  margin-top: 28px;
-  font-size: 15px;
+  margin-top: 24px;
+  font-size: 14px;
   color: var(--muted);
 }
 .foot a{
@@ -161,20 +198,9 @@ h2{
   font-weight: 600;
 }
 .foot a:hover{ text-decoration: underline; }
-.error{
-  background: var(--error-bg);
-  border: 1px solid var(--error-border);
-  border-radius: 4px;
-  padding: 14px 16px;
-  font-size: 14px;
-  color: var(--error-text);
-  margin-bottom: 24px;
-  display: none;
-  font-weight: 500;
-}
 .spinner{
   display: inline-block;
-  width: 17px; height: 17px;
+  width: 16px; height: 16px;
   border: 2px solid rgba(255,255,255,0.3);
   border-top-color: #fff;
   border-radius: 50%;
@@ -183,9 +209,7 @@ h2{
   margin-right: 8px;
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
-@media(max-width: 560px){
-  .auth-box{ padding: 32px 24px; }
-}
+@media(max-width: 560px){ .auth-box{ padding: 32px 20px; } }
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition: background-color 0s 600000s, color 0s 600000s;
@@ -198,7 +222,7 @@ input:-webkit-autofill:focus {
 <div class="logo-area">
   <img src="07d3a4e2-8cf5-43b7-8c90-df4419da67de.jfif" alt="Kowri"
     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
-  <div class="logo-fallback" style="display:none;">
+  <div style="display:none; align-items:center; gap:10px;">
     <svg width="40" height="40" viewBox="0 0 36 36" fill="none">
       <defs>
         <radialGradient id="lg" cx="40%" cy="30%" r="70%">
@@ -217,23 +241,44 @@ input:-webkit-autofill:focus {
   <h2>Welcome back</h2>
   <p class="sub">Sign in to your Kowri account</p>
 
-  <div class="error" id="err-box"></div>
+  <div class="banner error-banner" id="err-box">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <div class="banner-body">
+      <strong id="err-title">Sign in failed</strong>
+      <span id="err-msg"></span>
+    </div>
+  </div>
+
+  <div class="banner success-banner" id="suc-box">
+    <i class="fa-solid fa-circle-check"></i>
+    <div class="banner-body">
+      <strong>Signed in!</strong>
+      <span>Redirecting you now…</span>
+    </div>
+  </div>
 
   <div class="field">
-    <label for="email">Email</label>
-    <input type="email" id="email" placeholder="Enter your email" autocomplete="email"/>
+    <label for="email">Email Address</label>
+    <input type="email" id="email" placeholder="e.g. kwame@example.com" autocomplete="email" inputmode="email" spellcheck="false"/>
+    <div class="field-hint" id="hint-email">Please enter a valid email address</div>
   </div>
 
   <div class="field">
     <div class="field-row">
       <label for="password">Password</label>
-      <a href="#" class="forgot-link">Forgot your password?</a>
+      <a href="#" class="forgot-link">Forgot password?</a>
     </div>
-    <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password"/>
+    <div class="pass-wrap">
+      <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password"/>
+      <button type="button" class="pass-toggle" onclick="togglePass()" tabindex="-1" aria-label="Show/hide password">
+        <i class="fa-regular fa-eye"></i>
+      </button>
+    </div>
+    <div class="field-hint" id="hint-password">Please enter your password</div>
   </div>
 
   <div class="remember-row">
-    <input type="checkbox" id="remember"/>
+    <input type="checkbox" id="remember" autocomplete="off"/>
     <label for="remember">Remember me</label>
   </div>
 
@@ -243,73 +288,127 @@ input:-webkit-autofill:focus {
 </div>
 
 <script>
-const API = 'https://kowriwebbackend-h4uz.onrender.com';
-const ADMIN_EMAILS = ['annorsolomon1@gmail.com'];
+const API = 'http://localhost:8080';
 
-function isAdminEmail(email) {
-  return ADMIN_EMAILS.some(a => a.toLowerCase() === email.toLowerCase());
+function togglePass() {
+  const input = document.getElementById('password');
+  const icon  = document.querySelector('.pass-toggle i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.replace('fa-eye', 'fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.replace('fa-eye-slash', 'fa-eye');
+  }
+}
+
+function clearErrors() {
+  document.getElementById('err-box').style.display = 'none';
+  ['email','password'].forEach(id => {
+    document.getElementById(id).classList.remove('input-error');
+  });
+  document.querySelectorAll('.field-hint').forEach(h => h.classList.remove('show'));
+}
+
+function fieldError(inputId, hintId) {
+  document.getElementById(inputId).classList.add('input-error');
+  document.getElementById(hintId).classList.add('show');
+}
+
+function showError(title, msg) {
+  document.getElementById('err-title').textContent = title;
+  document.getElementById('err-msg').textContent   = msg;
+  const box = document.getElementById('err-box');
+  box.style.display = 'flex';
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function friendlyError(rawMsg) {
+  const m = (rawMsg || '').toLowerCase();
+  if (m.includes('invalid') || m.includes('credentials') || m.includes('password') || m.includes('unauthorized'))
+    return { title: 'Incorrect email or password', msg: 'Please double-check your details and try again.' };
+  if (m.includes('not found') || m.includes('no account') || m.includes('user'))
+    return { title: 'Account not found', msg: 'No account exists with this email. Try registering instead.' };
+  if (m.includes('network') || m.includes('fetch') || m.includes('failed to fetch'))
+    return { title: 'Connection issue', msg: 'Check your internet connection and try again.' };
+  if (m.includes('server') || m.includes('500') || m.includes('internal'))
+    return { title: 'Server error', msg: 'Something went wrong on our side. Please retry in a moment.' };
+  return { title: 'Sign in failed', msg: rawMsg || 'Please review your details and try again.' };
 }
 
 async function doSignIn() {
   const btn = document.getElementById('si-btn');
-  const errBox = document.getElementById('err-box');
-  errBox.style.display = 'none';
+  clearErrors();
 
-  const email = document.getElementById('email').value.trim();
+  const email    = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
+  const remember = document.getElementById('remember').checked;
 
-  if (!email || !password) {
-    errBox.textContent = 'Please enter your email and password to continue.';
-    errBox.style.display = 'block';
-    return;
-  }
-  if (!email.includes('@')) {
-    errBox.textContent = 'Please enter a valid email address.';
-    errBox.style.display = 'block';
+  let hasError = false;
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { fieldError('email', 'hint-email'); hasError = true; }
+  if (!password)                                             { fieldError('password', 'hint-password'); hasError = true; }
+  if (hasError) {
+    showError('Please fix the fields below', 'Make sure email and password are filled in correctly.');
     return;
   }
 
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Signing in...';
+  btn.innerHTML = '<span class="spinner"></span> Signing in…';
 
   try {
-    if (isAdminEmail(email)) {
-      const res = await fetch(`${API}/api/admin/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Invalid admin credentials');
-      localStorage.setItem('kowri_admin_token', data.token);
-      localStorage.setItem('kowri_admin_refresh', data.refreshToken);
-      localStorage.setItem('kowri_admin', JSON.stringify({ id: data.adminId || data.userId || data.id, fullName: data.fullName, email: data.email, role: data.role || 'admin' }));
-      localStorage.setItem('kowri_token', data.token);
-      localStorage.setItem('kowri_user', JSON.stringify(data));
-      location.href = 'admin/admin-dashboard.html';
-    } else {
-      const res = await fetch(`${API}/api/users/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Invalid email or password');
-      localStorage.setItem('kowri_token', data.token);
-      localStorage.setItem('kowri_refresh', data.refreshToken);
-      localStorage.setItem('kowri_user', JSON.stringify(data));
-      location.href = 'dashboard.html';
+    // ✅ Single unified endpoint for all users
+    const res = await fetch(`${API}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    let data = {};
+    try { data = await res.json(); } catch(_) {}
+
+    if (!res.ok) {
+      const { title, msg } = friendlyError(data.message || data.error || `HTTP ${res.status}`);
+      showError(title, msg);
+      btn.disabled = false;
+      btn.textContent = 'LOG IN';
+      return;
     }
+
+    // Persist tokens
+    const store = remember ? localStorage : sessionStorage;
+    store.setItem('kowri_token',   data.token);
+    store.setItem('kowri_refresh', data.refreshToken);
+    store.setItem('kowri_user',    JSON.stringify(data));
+
+    // Always keep in localStorage so other pages can read it
+    localStorage.setItem('kowri_token', data.token);
+    localStorage.setItem('kowri_user',  JSON.stringify(data));
+
+    document.getElementById('suc-box').style.display = 'flex';
+
+    // ✅ Redirect based on role returned by the API
+    setTimeout(() => {
+      const role = (data.role || '').toUpperCase();
+      if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+        location.href = 'admin/admin-dashboard.html';
+      } else {
+        location.href = 'dashboard.html';
+      }
+    }, 1200);
+
   } catch(e) {
-    errBox.textContent = e.message || 'Connection issue. Please try again.';
-    errBox.style.display = 'block';
+    const { title, msg } = friendlyError(e.message);
+    showError(title, msg);
     btn.disabled = false;
     btn.textContent = 'LOG IN';
   }
 }
 
-document.addEventListener('keydown', e => { if(e.key === 'Enter') doSignIn(); });
-window.addEventListener('load', () => { document.getElementById('email').focus(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.activeElement.tagName === 'INPUT') doSignIn();
+});
+
+window.addEventListener('load', () => document.getElementById('email').focus());
 </script>
 </body>
 </html>

@@ -21,7 +21,7 @@ html { scroll-behavior: smooth; }
 body { font-family: 'DM Sans', sans-serif; color: var(--ink); background: #fff; overflow-x: hidden; }
 
 /* NAV */
-nav {
+body > nav {
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 56px; background: #fff;
   border-bottom: 1px solid var(--border);
@@ -45,17 +45,9 @@ nav {
   position: relative; width: 100%; height: 540px; overflow: hidden;
   background: #a7f3d0;
 }
-.hero-bg {
+.hero img.hero-bg {
   width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; inset: 0;
 }
-.hero-ph {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
-  color: rgba(22,163,74,0.45); font-family: 'Sora', sans-serif; font-size: 14px;
-  flex-direction: column; gap: 10px;
-}
-.hero-ph i { font-size: 48px; }
 .hero-overlay {
   position: absolute; inset: 0;
   background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 55%, transparent 100%);
@@ -84,18 +76,16 @@ nav {
   align-items: center; max-width: 1200px; margin: 0 auto; padding: 80px 56px;
   gap: 80px;
 }
+/* Image wrapper — fixed height, image fills it completely, no placeholder overlay */
 .rewards-img-wrap {
-  border-radius: 14px; overflow: hidden; position: relative;
-  min-height: 380px; background: linear-gradient(135deg, #15803d, #22c55e);
-  display: flex; align-items: center; justify-content: center;
+  border-radius: 14px; overflow: hidden;
+  height: 400px; position: relative;
+  background: linear-gradient(135deg, #15803d, #22c55e);
 }
-.rewards-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.rewards-img-ph {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 10px;
-  color: rgba(255,255,255,0.35); font-family: 'Sora', sans-serif; font-size: 13px;
+.rewards-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; position: absolute; inset: 0;
 }
-.rewards-img-ph i { font-size: 44px; }
 .rewards-text h2 {
   font-family: 'Sora', sans-serif; font-weight: 800; font-size: clamp(26px, 3.5vw, 42px);
   color: var(--ink); line-height: 1.15; letter-spacing: -0.03em;
@@ -130,51 +120,44 @@ nav {
   font-size: 14px; color: var(--ink); line-height: 1.9; text-transform: uppercase; font-weight: 400;
 }
 .secure-img-wrap {
-  border-radius: 14px; overflow: hidden; background: #f3f4f6;
-  min-height: 300px; display: flex; align-items: center; justify-content: center;
+  border-radius: 14px; overflow: hidden;
+  height: 300px; position: relative; background: #f3f4f6;
 }
-.secure-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.secure-img-ph {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 10px; color: #9ca3af; font-family: 'Sora', sans-serif; font-size: 13px;
-  width: 100%; height: 300px;
+.secure-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; position: absolute; inset: 0;
 }
-.secure-img-ph i { font-size: 44px; }
 
-/* KB POS + QR */
+/* KB POS + QR — equal heights */
 .kbqr {
   display: grid; grid-template-columns: 1fr 1fr;
   align-items: start; gap: 60px; max-width: 1200px; margin: 0 auto; padding: 0 56px 80px;
 }
-.kbqr-left { display: flex; align-items: flex-start; gap: 28px; }
-.kbpos-img-wrap {
-  width: 210px; flex-shrink: 0; border-radius: 12px; overflow: hidden;
-  background: #f0fdf4; min-height: 270px;
-  display: flex; align-items: center; justify-content: center; position: relative;
+.kbqr-left,
+.kbqr-right {
+  display: flex; align-items: flex-start; gap: 24px;
 }
-.kbpos-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.kbpos-img-ph {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 8px; color: rgba(22,163,74,0.4); font-size: 12px; font-family: 'Sora', sans-serif;
-  text-align: center; padding: 12px; width: 100%; height: 270px;
-}
-.kbpos-img-ph i { font-size: 36px; }
-.kbpos-text h3 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 22px; color: var(--ink); margin-bottom: 12px; }
-.kbpos-text p { font-size: 14px; color: var(--muted); line-height: 1.75; }
-.kbqr-right { display: flex; align-items: flex-start; gap: 28px; }
+
+/* Both image wrappers same fixed size */
+.kbpos-img-wrap,
 .qr-img-wrap {
-  width: 190px; flex-shrink: 0; border-radius: 12px; overflow: hidden;
-  background: #f0fdf4; min-height: 190px;
-  display: flex; align-items: center; justify-content: center; position: relative;
+  width: 200px; flex-shrink: 0;
+  height: 240px;           /* identical height */
+  border-radius: 12px; overflow: hidden;
+  position: relative; background: #f0fdf4;
 }
-.qr-img-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.qr-img-ph {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 8px; color: rgba(22,163,74,0.4); font-size: 12px; font-family: 'Sora', sans-serif;
-  text-align: center; padding: 12px; width: 100%; height: 190px;
+.kbpos-img-wrap img,
+.qr-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; position: absolute; inset: 0;
 }
-.qr-img-ph i { font-size: 36px; }
-.qr-text h3 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 22px; color: var(--ink); margin-bottom: 12px; }
+
+.kbpos-text h3,
+.qr-text h3 {
+  font-family: 'Sora', sans-serif; font-weight: 700; font-size: 22px;
+  color: var(--ink); margin-bottom: 12px;
+}
+.kbpos-text p,
 .qr-text p { font-size: 14px; color: var(--muted); line-height: 1.75; }
 
 /* CTA */
@@ -201,26 +184,62 @@ nav {
 .btn-cta-solid:hover { background: var(--green); }
 
 /* FOOTER */
-footer { background: #e5e7eb; padding: 36px 56px 0; }
-.footer-main {
-  display: flex; align-items: center; justify-content: space-between;
-  padding-bottom: 24px; flex-wrap: wrap; gap: 20px;
+footer {
+  background: #e5e7eb;
+  padding: 52px 56px 0;
 }
+.footer-main {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.footer-brand { display: flex; flex-direction: column; gap: 20px; }
 .footer-logo-wrap { display: flex; align-items: center; gap: 8px; text-decoration: none; }
 .footer-logo-wrap img { height: 36px; width: auto; }
-.footer-social { display: flex; gap: 18px; }
-.footer-social a { color: var(--green); font-size: 22px; transition: color .18s; }
-.footer-social a:hover { color: var(--ink); }
-.footer-nav { display: flex; gap: 28px; flex-wrap: wrap; }
-.footer-nav a { text-decoration: none; color: var(--muted); font-size: 14px; transition: color .18s; }
-.footer-nav a:hover { color: var(--green); }
-.footer-legal {
-  display: flex; align-items: center; justify-content: flex-end;
-  padding: 14px 0; gap: 24px; flex-wrap: wrap;
-  border-top: 1px solid rgba(0,0,0,0.08);
+.footer-logo-text {
+  font-family: 'Sora', sans-serif; font-weight: 800; font-size: 22px;
+  color: var(--ink); letter-spacing: -0.03em;
 }
-.footer-legal a { font-size: 12px; color: var(--muted); text-decoration: none; }
-.footer-legal a:hover { color: var(--green); }
+.footer-tagline { font-size: 13px; color: var(--muted); max-width: 200px; line-height: 1.6; }
+.footer-social { display: flex; gap: 14px; }
+.footer-social a {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(0,0,0,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 16px;
+  transition: all .2s; text-decoration: none;
+}
+.footer-social a:hover { background: var(--green-vivid); color: #fff; }
+
+.footer-links-grid {
+  display: grid; grid-template-columns: repeat(3, auto); gap: 12px 48px;
+  justify-content: center; align-content: start; padding-top: 4px;
+  background: none;
+}
+.footer-links-grid a {
+  text-decoration: none; color: var(--muted); font-size: 14px;
+  transition: color .18s; white-space: nowrap;
+}
+.footer-links-grid a:hover { color: var(--green); }
+
+.footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
+.footer-badge {
+  background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.2);
+  border-radius: 8px; padding: 14px 20px; text-align: right;
+}
+.footer-badge .badge-label { font-size: 11px; color: var(--green); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.footer-badge .badge-value { font-family: 'Sora', sans-serif; font-size: 15px; color: var(--ink); font-weight: 700; margin-top: 4px; }
+
+.footer-legal {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0 20px; flex-wrap: wrap; gap: 12px;
+}
+.footer-legal-links { display: flex; gap: 20px; }
+.footer-legal-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color .18s; }
+.footer-legal-links a:hover { color: var(--green); }
 .footer-legal span { font-size: 12px; color: var(--muted); }
 
 @media(max-width: 900px) {
@@ -229,9 +248,12 @@ footer { background: #e5e7eb; padding: 36px 56px 0; }
   .rewards { grid-template-columns: 1fr; padding: 60px 24px; gap: 40px; }
   .secure { grid-template-columns: 1fr; gap: 36px; padding: 0 24px 60px; }
   .kbqr { grid-template-columns: 1fr; gap: 40px; padding: 0 24px 60px; }
-  footer { padding: 28px 24px 0; }
   .cta-section { padding: 60px 24px; }
-  .footer-main { flex-direction: column; align-items: flex-start; }
+  footer { padding: 40px 24px 0; }
+  .footer-main { grid-template-columns: 1fr; gap: 32px; }
+  .footer-right { align-items: flex-start; }
+  .footer-badge { text-align: left; }
+  .footer-links-grid { grid-template-columns: repeat(2, auto); justify-content: start; }
 }
 </style>
 </head>
@@ -239,10 +261,8 @@ footer { background: #e5e7eb; padding: 36px 56px 0; }
 
 <nav>
   <a class="logo" href="#">
-    <img class="hero-bg" src="07d3a4e2-8cf5-43b7-8c90-df4419da67de.jfif" alt="Kowri hero"
-  onload="document.getElementById('heroPh').style.display='none'"
-  onerror="this.style.display='none'"/>
-    <span class="logo-wordmark" style="display:none;">kowri</span>
+    <img src="07d3a4e2-8cf5-43b7-8c90-df4419da67de.jfif" alt="Kowri logo" onerror="this.style.display='none'"/>
+    <span class="logo-wordmark">kowri</span>
   </a>
   <ul class="nav-links">
     <li><a href="#">Personal</a></li>
@@ -254,7 +274,6 @@ footer { background: #e5e7eb; padding: 36px 56px 0; }
 
 <section class="hero">
   <img class="hero-bg" src="feature_kowri_protect.jpg" alt="Kowri hero" onerror="this.style.display='none'"/>
-  <div class="hero-ph" id="heroPh"><i class="fa-regular fa-image"></i>Replace with your hero image</div>
   <div class="hero-overlay">
     <h1>Join Kowri<br>rewards now</h1>
     <p>Double Up your small token Details and get Big Rewards from Kowri Investment</p>
@@ -264,8 +283,7 @@ footer { background: #e5e7eb; padding: 36px 56px 0; }
 
 <div class="rewards">
   <div class="rewards-img-wrap">
-    <img src="https://mainkowri.com/images/ad.jpeg" alt="Big Rewards" onerror="this.style.display='none'"/>
-    <div class="rewards-img-ph"><i class="fa-regular fa-image"></i>Replace with your image</div>
+    <img src="https://mainkowri.com/images/ad.jpeg" alt="Big Rewards"/>
   </div>
   <div class="rewards-text">
     <h2>Big Rewards Awaits You!</h2>
@@ -282,16 +300,14 @@ footer { background: #e5e7eb; padding: 36px 56px 0; }
     <p>DO NOT SEND MONEY TO ANYONE FOR THE KOWRI REWARD. PLEASE WATCH OUR OLD VIDEO EXPLAINING THE KOWRI UPDATE PROCESS AND FOLLOW THE INSTRUCTIONS CAREFULLY TO COMPLETE IT SUCCESSFULLY. PLEASE WATCH THE PREVIOUS VIDEO TO HELP YOU UNDERSTAND THE PROCEDURES. NOTE THAT MOST OF THE INFORMATION IN THE VIDEO HAS BEEN UPDATED; THEREFORE, REFER TO IT FOR GUIDANCE ON THE PROCEDURES ONLY. CLICK ON CONTACT SALES IF YOU FACE ANY CHALLENGES.</p>
   </div>
   <div class="secure-img-wrap">
-    <img src="https://www.elegantthemes.com/blog/wp-content/uploads/2022/06/wordpress-secure.png" alt="Secure illustration" onerror="this.style.display='none'"/>
-    <div class="secure-img-ph"><i class="fa-regular fa-image"></i>Replace with your illustration</div>
+    <img src="https://www.elegantthemes.com/blog/wp-content/uploads/2022/06/wordpress-secure.png" alt="Secure illustration"/>
   </div>
 </div>
 
 <div class="kbqr">
   <div class="kbqr-left">
     <div class="kbpos-img-wrap">
-      <img src="https://mainkowri.com/images/kb.jpeg" alt="KB POS" onerror="this.style.display='none'"/>
-      <div class="kbpos-img-ph"><i class="fa-regular fa-image"></i>Replace with<br>KB POS image</div>
+      <img src="https://mainkowri.com/images/kb.jpeg" alt="KB POS"/>
     </div>
     <div class="kbpos-text">
       <h3>KB POS</h3>
@@ -300,8 +316,7 @@ footer { background: #e5e7eb; padding: 36px 56px 0; }
   </div>
   <div class="kbqr-right">
     <div class="qr-img-wrap">
-      <img src="https://mainkowri.com/images/qr.jpeg" alt="QR Code" onerror="this.style.display='none'"/>
-      <div class="qr-img-ph"><i class="fa-solid fa-qrcode"></i>Replace with<br>QR code image</div>
+      <img src="https://mainkowri.com/images/qr.jpeg" alt="QR Code"/>
     </div>
     <div class="qr-text">
       <h3>QR Codes</h3>
@@ -321,26 +336,45 @@ footer { background: #e5e7eb; padding: 36px 56px 0; }
 
 <footer>
   <div class="footer-main">
-    <a class="footer-logo-wrap" href="#">
-      <img src="07d3a4e2-8cf5-43b7-8c90-df4419da67de.jfif" alt="Kowri"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'"/>
-      <span style="display:none;font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:#111827;letter-spacing:-0.03em;">kowri</span>
-    </a>
-    <div class="footer-social">
-      <a href="#"><i class="fa-brands fa-facebook"></i></a>
-      <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+    <div class="footer-brand">
+      <a class="footer-logo-wrap" href="#">
+        <img src="07d3a4e2-8cf5-43b7-8c90-df4419da67de.jfif" alt="Kowri" onerror="this.style.display='none'"/>
+        <span class="footer-logo-text">kowri</span>
+      </a>
+      <p class="footer-tagline">Earn rewards every day with Ghana's smart loyalty platform.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://t.me/KOWRIAGENT" target="_blank" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+      </div>
     </div>
-    <nav class="footer-nav">
-      <a href="#">About</a><a href="#">Promos</a><a href="#">Blog</a>
-      <a href="#">Contact</a><a href="#">Marketplace</a><a href="#">Merchant API</a>
+
+    <nav class="footer-links-grid" aria-label="Footer navigation">
+      <a href="#">About</a>
+      <a href="#">Promos</a>
+      <a href="#">Blog</a>
+      <a href="#">Contact</a>
+      <a href="#">Marketplace</a>
+      <a href="#">Merchant API</a>
     </nav>
+
+    <div class="footer-right">
+      <div class="footer-badge">
+        <div class="badge-label">Registered in Ghana</div>
+        <div class="badge-value">SEVN Ghana Limited</div>
+      </div>
+    </div>
   </div>
+
   <div class="footer-legal">
-    <a href="#">Privacy Policy</a>
-    <a href="#">Legal Disclaimer</a>
-    <span>SEVN Ghana Limited trades as Kowri</span>
+    <div class="footer-legal-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Legal Disclaimer</a>
+    </div>
+    <span>© 2025 SEVN Ghana Limited · Trades as Kowri</span>
   </div>
 </footer>
+
 </body>
 </html>

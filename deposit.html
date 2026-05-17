@@ -4,90 +4,187 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Kowri – Make Deposit</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 <style>
-:root{--green:#22c55e;--green-dark:#16a34a;--bg:#f9fafb;--card:#fff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--radius:14px;}
+:root{
+  --green:#22c55e; --green-dark:#16a34a; --green-light:#dcfce7;
+  --bg:#f0f2f5; --card:#fff; --text:#111827; --muted:#6b7280;
+  --border:#e5e7eb; --radius:12px;
+  --shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.05);
+}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-.dash-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
-.logo{display:flex;align-items:center;gap:9px;font-family:'Sora',sans-serif;font-weight:800;font-size:18px;color:var(--green);}
-.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:7px;display:flex;align-items:center;justify-content:center;}
-.btn-back{background:none;border:1px solid var(--border);border-radius:8px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;}
+/* NAV */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:60px;background:#fff;border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:8px;
+  font-family:'Sora',sans-serif;font-weight:800;font-size:19px;letter-spacing:-0.03em;
+}
+.logo-dot{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--green-dark),var(--green));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;font-weight:800;
+}
+.btn-back{
+  display:flex;align-items:center;gap:6px;
+  background:none;border:1px solid var(--border);border-radius:7px;
+  padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;
+  color:var(--muted);transition:all .18s;font-family:'DM Sans',sans-serif;
+}
 .btn-back:hover{border-color:var(--green);color:var(--green);}
 
-.body{padding:40px 24px;max-width:600px;margin:0 auto;}
-.page-head{margin-bottom:28px;}
-.page-head h1{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;}
-.page-head p{font-size:14px;color:var(--muted);margin-top:5px;}
+/* BODY */
+.body{padding:36px 24px;max-width:580px;margin:0 auto;}
+.page-head{margin-bottom:24px;}
+.page-head h1{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;}
+.page-head p{font-size:14px;color:var(--muted);margin-top:4px;}
 
-.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;}
+/* TIER CARDS */
+.tier-section{margin-bottom:24px;}
+.tier-section-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:10px;}
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.tier-card{
+  background:var(--card);border:2px solid var(--border);border-radius:var(--radius);
+  padding:16px 12px;text-align:center;cursor:pointer;transition:all .18s;
+}
+.tier-card:hover{border-color:var(--green);background:#f0fdf4;}
+.tier-card.selected{border-color:var(--green);background:var(--green-light);}
+.tier-amt{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--text);}
+.tier-card.selected .tier-amt{color:var(--green-dark);}
+.tier-reward{font-size:11px;font-weight:600;color:var(--muted);margin-top:3px;}
+.tier-card.selected .tier-reward{color:var(--green-dark);}
+.tier-badge{
+  display:inline-block;margin-top:6px;font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:99px;background:#e5e7eb;color:#374151;letter-spacing:0.04em;
+}
+.tier-card.selected .tier-badge{background:var(--green-dark);color:#fff;}
 
-.field{margin-bottom:20px;}
-.field label{display:block;font-size:13px;font-weight:600;margin-bottom:7px;color:#374151;}
-.field input,.field select{width:100%;padding:12px 14px;background:#fff;border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s;font-family:'DM Sans',sans-serif;}
+/* FORM CARD */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+.section-divider{
+  display:flex;align-items:center;gap:10px;margin:20px 0;
+  font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;
+}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.field{margin-bottom:18px;}
+.field label{
+  display:flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:600;margin-bottom:6px;color:#374151;
+}
+.field label .lbadge{
+  font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;
+  background:#fef3c7;color:#92400e;
+}
+.field input,.field select{
+  width:100%;padding:11px 13px;background:#fff;border:1.5px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:14px;outline:none;
+  transition:border-color .18s;font-family:'DM Sans',sans-serif;
+}
 .field input:focus,.field select:focus{border-color:var(--green);}
 .field input.invalid{border-color:#f87171;}
-.field input[type="file"]{padding:8px 14px;font-size:13px;}
-.field-hint{font-size:11px;color:var(--muted);margin-top:4px;}
-.field-error{font-size:11px;color:#dc2626;margin-top:4px;display:none;}
+.field-hint{font-size:11px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:4px;}
+.field-error{font-size:11px;color:#dc2626;margin-top:4px;display:none;font-weight:600;}
 
-/* Amount input with type badge */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* Amount with badge */
 .amount-wrap{position:relative;}
-.amount-wrap input{padding-right:110px;}
+.amount-wrap input{padding-right:108px;}
 .amount-type-badge{
-  position:absolute;right:12px;top:50%;transform:translateY(-50%);
-  font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;
-  letter-spacing:.04em;pointer-events:none;transition:all .25s;
-  opacity:0;
+  position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;
+  letter-spacing:.04em;pointer-events:none;transition:all .2s;opacity:0;
 }
-.amount-type-badge.fixed{background:#dcfce7;color:#16a34a;opacity:1;}
+.amount-type-badge.fixed{background:var(--green-light);color:var(--green-dark);opacity:1;}
 .amount-type-badge.flexible{background:#dbeafe;color:#2563eb;opacity:1;}
 
-/* Tier hint pills */
-.tier-hints{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
-.tier-pill{
-  padding:4px 11px;border-radius:999px;font-size:11px;font-weight:600;
-  border:1px solid var(--border);background:#f9fafb;color:var(--muted);
-  cursor:pointer;transition:all .18s;user-select:none;
+/* Upload zone */
+.upload-zone{
+  border:2px dashed var(--border);border-radius:8px;padding:20px;
+  text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
 }
-.tier-pill:hover{border-color:var(--green);color:var(--green);background:#f0fdf4;}
+.upload-zone:hover{border-color:var(--green);background:#f0fdf4;}
+.upload-zone.has-file{border-color:var(--green);background:var(--green-light);}
+.upload-zone input[type="file"]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.upload-icon{font-size:24px;color:var(--muted);margin-bottom:6px;}
+.upload-zone.has-file .upload-icon{color:var(--green-dark);}
+.upload-label{font-size:13px;font-weight:600;color:var(--muted);}
+.upload-zone.has-file .upload-label{color:var(--green-dark);}
+.upload-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.preview-wrap{margin-top:12px;display:none;}
+.preview-wrap img{max-width:100%;max-height:200px;border-radius:8px;border:1px solid var(--border);display:block;margin:0 auto;}
 
-/* Upload */
-.upload-hint{font-size:12px;color:var(--muted);margin-top:5px;}
-.preview-wrap{margin-top:10px;display:none;}
-.preview-wrap img{max-width:100%;max-height:180px;border-radius:8px;border:1px solid var(--border);}
-
-.btn-submit{width:100%;background:var(--green);color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:15px;padding:14px;border:none;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:8px;}
+/* Submit btn */
+.btn-submit{
+  width:100%;background:var(--green);color:#fff;
+  font-family:'Sora',sans-serif;font-weight:700;font-size:15px;
+  padding:14px;border:none;border-radius:9px;cursor:pointer;
+  transition:all .2s;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
 .btn-submit:hover{background:var(--green-dark);}
 .btn-submit:disabled{opacity:.6;cursor:not-allowed;}
 
-.error{background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:12px 14px;font-size:13px;color:#991b1b;margin-bottom:16px;display:none;}
+/* Error / Success */
+.alert{
+  border-radius:9px;padding:13px 16px;font-size:13px;margin-bottom:18px;
+  display:none;align-items:flex-start;gap:10px;
+}
+.alert.error{background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;}
+.alert.success{background:var(--green-light);border:1px solid #86efac;color:#166534;}
+.alert i{flex-shrink:0;margin-top:1px;}
+.alert.show{display:flex;}
 
-.success-card{background:#dcfce7;border:1px solid #86efac;border-radius:12px;padding:28px;text-align:center;display:none;}
-.success-card .s-icon{width:56px;height:56px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
-.success-card h3{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:#166534;margin-bottom:6px;}
-.success-card p{font-size:14px;color:#166534;}
-.success-card .btn-go{display:inline-block;margin-top:18px;background:var(--green);color:#fff;font-family:'Sora',sans-serif;font-weight:700;padding:11px 24px;border-radius:9px;border:none;cursor:pointer;font-size:14px;}
+.success-card{
+  background:var(--card);border:1px solid #86efac;border-radius:var(--radius);
+  padding:40px 32px;text-align:center;display:none;box-shadow:var(--shadow);
+}
+.s-icon{
+  width:64px;height:64px;background:var(--green);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+}
+.success-card h3{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:#166534;margin-bottom:8px;}
+.success-card p{font-size:14px;color:#166534;line-height:1.6;}
+.btn-go{
+  display:inline-flex;align-items:center;gap:7px;margin-top:20px;
+  background:var(--green);color:#fff;font-family:'Sora',sans-serif;
+  font-weight:700;padding:12px 26px;border-radius:9px;border:none;
+  cursor:pointer;font-size:14px;transition:all .2s;
+}
+.btn-go:hover{background:var(--green-dark);}
 
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
+.spinner{
+  display:inline-block;width:16px;height:16px;
+  border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;
+  border-radius:50%;animation:spin .6s linear infinite;
+}
 @keyframes spin{to{transform:rotate(360deg);}}
 
 @media(max-width:560px){
+  .nav{padding:0 16px;}
+  .body{padding:20px 14px;}
+  .tier-grid{grid-template-columns:1fr 1fr;}
   .row2{grid-template-columns:1fr;}
-  .body{padding:24px 16px;}
-  .dash-nav{padding:12px 16px;}
+  .form-card{padding:20px;}
 }
 </style>
 </head>
 <body>
 
-<nav class="dash-nav">
-  <div class="logo">
-    <div class="logo-icon"><i class="fa-solid fa-shield-halved" style="color:#fff;font-size:14px;"></i></div>
-    Kowri
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="logo-dot">K</div>
+    kowri
   </div>
   <button class="btn-back" onclick="location.href='dashboard.html'">
     <i class="fa-solid fa-arrow-left"></i> Back
@@ -97,152 +194,215 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <div class="body">
   <div class="page-head">
     <h1>Make a Deposit</h1>
-    <p>Submit your deposit details and proof of payment</p>
+    <p>Submit your payment details and proof of payment to claim your reward</p>
   </div>
 
-  <div class="error" id="err-box"></div>
+  <!-- Alert box -->
+  <div class="alert error" id="err-box">
+    <i class="fa-solid fa-circle-xmark"></i>
+    <span id="err-msg"></span>
+  </div>
 
+  <!-- Success state -->
   <div class="success-card" id="success-box">
-    <div class="s-icon"><i class="fa-solid fa-check" style="color:#fff;font-size:22px;"></i></div>
+    <div class="s-icon"><i class="fa-solid fa-check" style="color:#fff;font-size:24px;"></i></div>
     <h3>Deposit Submitted!</h3>
-    <p>Your deposit is pending admin approval. You'll be notified once it's approved.</p>
-    <button class="btn-go" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+    <p>Your deposit is pending admin approval.<br/>You'll be notified once it's reviewed.</p>
+    <button class="btn-go" onclick="location.href='dashboard.html'">
+      <i class="fa-solid fa-house"></i> Back to Dashboard
+    </button>
   </div>
 
-  <div class="form-card" id="form-section">
+  <!-- Form -->
+  <div id="form-section">
 
-    <div class="row2">
+    <!-- Tier picker -->
+    <div class="tier-section">
+      <div class="tier-section-label">Fixed Tiers — tap to quick-fill</div>
+      <div class="tier-grid">
+        <div class="tier-card" onclick="selectTier(300)">
+          <div class="tier-amt">GH₵ 300</div>
+          <div class="tier-reward">Reward: GH₵ 3,500</div>
+          <span class="tier-badge">FIXED</span>
+        </div>
+        <div class="tier-card" onclick="selectTier(500)">
+          <div class="tier-amt">GH₵ 500</div>
+          <div class="tier-reward">Reward: GH₵ 5,500</div>
+          <span class="tier-badge">FIXED</span>
+        </div>
+        <div class="tier-card" onclick="selectTier(1000)">
+          <div class="tier-amt">GH₵ 1,000</div>
+          <div class="tier-reward">Reward: GH₵ 10,500</div>
+          <span class="tier-badge">FIXED</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+
+      <!-- Payment credentials -->
+      <div class="row2">
+        <div class="field">
+          <label>Token ID <span class="lbadge">12 digits</span></label>
+          <input type="text" id="tokenId" placeholder="e.g. 123456789012"
+                 maxlength="12" inputmode="numeric" autocomplete="off"
+                 oninput="validateField(this,/^\d{12}$/,'tokenId-err')"/>
+          <div class="field-error" id="tokenId-err">Must be exactly 12 digits.</div>
+        </div>
+        <div class="field">
+          <label>Secret Code <span class="lbadge">4 digits</span></label>
+          <input type="text" id="secretCode" placeholder="e.g. 1234"
+                 maxlength="4" inputmode="numeric" autocomplete="off"
+                 oninput="validateField(this,/^\d{4}$/,'secretCode-err')"/>
+          <div class="field-error" id="secretCode-err">Must be exactly 4 digits.</div>
+        </div>
+      </div>
+
       <div class="field">
-        <label>Token ID</label>
-        <input type="text" id="tokenId" placeholder="12-digit Token ID" maxlength="12" autocomplete="off"
-               oninput="validateField(this,/^\d{12}$/,'tokenId-err')"/>
-        <div class="field-hint">Must be exactly 12 digits</div>
-        <div class="field-error" id="tokenId-err">Token ID must be 12 digits.</div>
+        <label>Wallet ID <span class="lbadge">10 digits</span></label>
+        <input type="text" id="walletId" placeholder="e.g. 0240796632"
+               maxlength="10" inputmode="numeric" autocomplete="off"
+               oninput="validateField(this,/^\d{10}$/,'walletId-err')"/>
+        <div class="field-error" id="walletId-err">Must be exactly 10 digits.</div>
       </div>
+
+      <div class="section-divider">Amount</div>
+
       <div class="field">
-        <label>Secret Code</label>
-        <input type="text" id="secretCode" placeholder="4-digit code" maxlength="4" autocomplete="off"
-               oninput="validateField(this,/^\d{4}$/,'secretCode-err')"/>
-        <div class="field-hint">Must be exactly 4 digits</div>
-        <div class="field-error" id="secretCode-err">Secret Code must be 4 digits.</div>
+        <label>Amount (GH₵)</label>
+        <div class="amount-wrap">
+          <input type="number" id="amount" placeholder="Enter amount or pick a tier above"
+                 min="1" autocomplete="off" oninput="onAmountInput()"/>
+          <span class="amount-type-badge" id="type-badge"></span>
+        </div>
+        <div class="field-hint" id="amount-hint">
+          <i class="fa-solid fa-circle-info" style="font-size:10px;"></i>
+          Tap a tier above or enter any amount for a flexible deposit
+        </div>
+        <div class="field-error" id="amount-err">Please enter a valid amount greater than 0.</div>
       </div>
-    </div>
 
-    <div class="field">
-      <label>Wallet ID</label>
-      <input type="text" id="walletId" placeholder="e.g. 0240796632" maxlength="10" autocomplete="off"
-             oninput="validateField(this,/^\d{10}$/,'walletId-err')"/>
-      <div class="field-hint">Must be exactly 10 digits</div>
-      <div class="field-error" id="walletId-err">Wallet ID must be 10 digits.</div>
-    </div>
+      <div class="section-divider">Proof of Payment</div>
 
-    <div class="field">
-      <label>Amount (GH₵)</label>
-      <div class="amount-wrap">
-        <input type="number" id="amount" placeholder="Enter amount e.g. 300"
-               min="1" autocomplete="off" oninput="onAmountInput()"/>
-        <span class="amount-type-badge" id="type-badge"></span>
+      <div class="field">
+        <label>Upload Screenshot</label>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="proof" accept="image/*" onchange="previewImage(this)"/>
+          <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <div class="upload-label" id="upload-label">Click or drag to upload</div>
+          <div class="upload-sub">PNG, JPG, WEBP — max 5MB</div>
+        </div>
+        <div class="field-error" id="proof-err">Please upload a valid screenshot of your payment.</div>
+        <div class="preview-wrap" id="preview-wrap">
+          <img id="preview-img" src="" alt="Proof preview"/>
+        </div>
       </div>
-      <div class="tier-hints">
-        <span class="tier-pill" onclick="setAmount(300)">GH₵ 300</span>
-        <span class="tier-pill" onclick="setAmount(500)">GH₵ 500</span>
-        <span class="tier-pill" onclick="setAmount(1000)">GH₵ 1,000</span>
-      </div>
-      <div class="field-hint" id="amount-hint" style="margin-top:6px;">Quick select a fixed tier or enter any amount</div>
-      <div class="field-error" id="amount-err">Please enter a valid amount greater than 0.</div>
+
+      <button class="btn-submit" id="dep-btn" onclick="doDeposit()">
+        <i class="fa-solid fa-paper-plane"></i> Submit Deposit
+      </button>
+
     </div>
-
-    <div class="field">
-      <label>Upload Screenshot / Proof</label>
-      <input type="file" id="proof" accept="image/*" onchange="previewImage(this)"/>
-      <div class="upload-hint">Upload a screenshot of your payment confirmation (max 5MB)</div>
-      <div class="field-error" id="proof-err">Please upload a valid image file.</div>
-      <div class="preview-wrap" id="preview-wrap">
-        <img id="preview-img" src="" alt="Preview"/>
-      </div>
-    </div>
-
-    <button class="btn-submit" id="dep-btn" onclick="doDeposit()">
-      <i class="fa-solid fa-paper-plane"></i> Claim Reward Now
-    </button>
-
   </div>
 </div>
 
 <script>
-const API = 'https://kowriwebbackend-h4uz.onrender.com';
+const API = 'http://localhost:8080';
 const FIXED_TIERS = [300, 500, 1000];
+const REWARDS = { 300: '3,500', 500: '5,500', 1000: '10,500' };
 
-function validateField(input, regex, errId) {
-  const val = input.value.trim();
-  const errEl = document.getElementById(errId);
-  const isValid = regex.test(val);
-  input.classList.toggle('invalid', val.length > 0 && !isValid);
-  errEl.style.display = (val.length > 0 && !isValid) ? 'block' : 'none';
-}
-
-function setAmount(val) {
+/* ── Tier picker ── */
+function selectTier(val){
+  document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
+  const idx = FIXED_TIERS.indexOf(val);
+  if(idx > -1) document.querySelectorAll('.tier-card')[idx].classList.add('selected');
   document.getElementById('amount').value = val;
   onAmountInput();
 }
 
-function onAmountInput() {
-  const val = parseFloat(document.getElementById('amount').value);
+/* ── Amount input handler ── */
+function onAmountInput(){
+  const val   = parseFloat(document.getElementById('amount').value);
   const badge = document.getElementById('type-badge');
   const hint  = document.getElementById('amount-hint');
-  const errEl = document.getElementById('amount-err');
-  errEl.style.display = 'none';
+  document.getElementById('amount-err').style.display = 'none';
 
-  if (!val || val <= 0) {
+  // Deselect tier cards if user typed manually
+  const manualMatch = FIXED_TIERS.includes(val);
+  document.querySelectorAll('.tier-card').forEach((c,i) => {
+    c.classList.toggle('selected', FIXED_TIERS[i] === val);
+  });
+
+  if(!val || val <= 0){
     badge.className = 'amount-type-badge';
     badge.textContent = '';
-    hint.textContent = 'Quick select a fixed tier or enter any amount';
+    hint.innerHTML = '<i class="fa-solid fa-circle-info" style="font-size:10px;"></i> Tap a tier above or enter any amount for a flexible deposit';
     return;
   }
 
-  if (FIXED_TIERS.includes(val)) {
+  if(FIXED_TIERS.includes(val)){
     badge.className = 'amount-type-badge fixed';
     badge.textContent = 'FIXED';
-    const rewards = {300:'3,500', 500:'5,500', 1000:'10,500'};
-    hint.textContent = `Fixed tier — reward: GH₵ ${rewards[val]}`;
+    hint.innerHTML = `<i class="fa-solid fa-gift" style="font-size:10px;color:var(--green-dark);"></i> Fixed tier — reward: <strong>GH₵ ${REWARDS[val]}</strong>`;
   } else {
     badge.className = 'amount-type-badge flexible';
     badge.textContent = 'FLEXIBLE';
-    hint.textContent = 'Flexible deposit — admin will set your reward on approval';
+    hint.innerHTML = '<i class="fa-solid fa-circle-info" style="font-size:10px;"></i> Flexible — admin assigns your reward on approval';
   }
 }
 
-function previewImage(input) {
-  const wrap  = document.getElementById('preview-wrap');
-  const img   = document.getElementById('preview-img');
-  const errEl = document.getElementById('proof-err');
+/* ── Field validation ── */
+function validateField(input, regex, errId){
+  const val   = input.value.trim();
+  const errEl = document.getElementById(errId);
+  const bad   = val.length > 0 && !regex.test(val);
+  input.classList.toggle('invalid', bad);
+  errEl.style.display = bad ? 'block' : 'none';
+}
+
+/* ── Image preview ── */
+function previewImage(input){
+  const wrap   = document.getElementById('preview-wrap');
+  const img    = document.getElementById('preview-img');
+  const errEl  = document.getElementById('proof-err');
+  const zone   = document.getElementById('upload-zone');
+  const label  = document.getElementById('upload-label');
   errEl.style.display = 'none';
 
-  if (input.files && input.files[0]) {
+  if(input.files && input.files[0]){
     const file = input.files[0];
-    if (file.size > 5 * 1024 * 1024) {
+    if(file.size > 5 * 1024 * 1024){
       errEl.textContent = 'File too large. Maximum size is 5MB.';
       errEl.style.display = 'block';
       input.value = '';
       wrap.style.display = 'none';
+      zone.classList.remove('has-file');
       return;
     }
     const reader = new FileReader();
-    reader.onload = e => { img.src = e.target.result; wrap.style.display = 'block'; };
+    reader.onload = e => {
+      img.src = e.target.result;
+      wrap.style.display = 'block';
+      zone.classList.add('has-file');
+      label.textContent = file.name;
+    };
     reader.readAsDataURL(file);
   }
 }
 
-function init() {
+/* ── Init ── */
+function init(){
   const stored = localStorage.getItem('kowri_user');
   const token  = localStorage.getItem('kowri_token');
-  if (!stored || !token) { location.href = 'signin.html'; }
+  if(!stored || !token){ location.href='signin.html'; }
 }
 
-async function doDeposit() {
+/* ── Submit ── */
+async function doDeposit(){
   const btn    = document.getElementById('dep-btn');
   const errBox = document.getElementById('err-box');
-  errBox.style.display = 'none';
+  const errMsg = document.getElementById('err-msg');
+  errBox.classList.remove('show');
 
   const tokenId    = document.getElementById('tokenId').value.trim();
   const secretCode = document.getElementById('secretCode').value.trim();
@@ -252,34 +412,33 @@ async function doDeposit() {
 
   let hasError = false;
 
-  if (!/^\d{12}$/.test(tokenId)) {
+  if(!/^\d{12}$/.test(tokenId)){
     document.getElementById('tokenId-err').style.display = 'block';
     document.getElementById('tokenId').classList.add('invalid');
     hasError = true;
   }
-  if (!/^\d{4}$/.test(secretCode)) {
+  if(!/^\d{4}$/.test(secretCode)){
     document.getElementById('secretCode-err').style.display = 'block';
     document.getElementById('secretCode').classList.add('invalid');
     hasError = true;
   }
-  if (!/^\d{10}$/.test(walletId)) {
+  if(!/^\d{10}$/.test(walletId)){
     document.getElementById('walletId-err').style.display = 'block';
     document.getElementById('walletId').classList.add('invalid');
     hasError = true;
   }
-  if (!amount || amount <= 0) {
+  if(!amount || amount <= 0){
     document.getElementById('amount-err').style.display = 'block';
     hasError = true;
   }
-  if (!proofFile) {
+  if(!proofFile){
     document.getElementById('proof-err').textContent = 'Please upload a screenshot as proof of payment.';
     document.getElementById('proof-err').style.display = 'block';
     hasError = true;
   }
+  if(hasError) return;
 
-  if (hasError) return;
-
-  // Auto-determine deposit type silently
+  // ── Auto-detect deposit type from amount ──
   const depositType = FIXED_TIERS.includes(amount) ? 'FIXED' : 'FLEXIBLE';
 
   const userData = JSON.parse(localStorage.getItem('kowri_user'));
@@ -287,31 +446,40 @@ async function doDeposit() {
   const userId   = userData.userId || userData.id;
 
   btn.disabled  = true;
-  btn.innerHTML = '<span class="spinner"></span>Submitting...';
+  btn.innerHTML = '<span class="spinner"></span> Submitting…';
 
   try {
+    // ── Correct endpoint: POST /api/deposits/{userId}/submit ──
+    // ── Correct FormData: flat fields + proofImage file key ──
     const formData = new FormData();
-    formData.append('data', new Blob([JSON.stringify({
-      tokenId, secretCode, walletId, amount, depositType
-    })], { type: 'application/json' }));
-    formData.append('proof', proofFile);
+    formData.append('depositType', depositType);
+    formData.append('amount',      amount);
+    formData.append('tokenId',     tokenId);
+    formData.append('secretCode',  secretCode);
+    formData.append('walletId',    walletId);
+    formData.append('proofImage',  proofFile); // field name must be proofImage
 
-    const res = await fetch(`${API}/api/users/${userId}/deposits`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` },
-      body: formData
+    const res = await fetch(`${API}/api/deposits/${userId}/submit`, {
+      method:  'POST',
+      headers: { Authorization: `Bearer ${token}` }, // no Content-Type — browser sets multipart boundary
+      body:    formData
     });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Deposit failed');
+    let data = {};
+    try { data = await res.json(); } catch(_){}
+
+    if(!res.ok) throw new Error(data.message || 'Deposit submission failed. Please try again.');
 
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('success-box').style.display  = 'block';
-  } catch(e) {
-    errBox.textContent = e.message;
-    errBox.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch(e){
+    errMsg.textContent = e.message;
+    errBox.classList.add('show');
     btn.disabled  = false;
-    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Claim Reward Now';
+    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Deposit';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 

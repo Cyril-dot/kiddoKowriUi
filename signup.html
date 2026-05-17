@@ -39,11 +39,6 @@ body{
   width: auto;
   display: block;
 }
-.logo-fallback{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 .logo-wordmark{
   font-family: 'Sora', sans-serif;
   font-weight: 800;
@@ -69,41 +64,70 @@ h2{
   letter-spacing: -0.02em;
 }
 .sub{
-  font-size: 16px;
+  font-size: 15px;
   color: var(--muted);
-  margin-bottom: 36px;
+  margin-bottom: 32px;
+  line-height: 1.5;
 }
-.field{
-  margin-bottom: 24px;
-}
+.field{ margin-bottom: 22px; }
 .field label{
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+}
+.field label .opt{
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 13px;
+  margin-left: 4px;
 }
 .field input{
   width: 100%;
-  padding: 14px 16px;
+  padding: 13px 16px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text);
   background: #fff;
   border: 1.5px solid var(--border);
   border-radius: 4px;
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 .field input:focus{
   border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.12);
 }
 .field input::placeholder{ color: #9ca3af; }
-.field input.input-error{ border-color: #f87171; }
+.field input.input-error{
+  border-color: #f87171;
+  box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
+}
+.phone-row{ display: flex; gap: 0; }
+.phone-prefix{
+  flex-shrink: 0;
+  display: flex; align-items: center;
+  padding: 0 14px;
+  background: #f9fafb;
+  border: 1.5px solid var(--border);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  user-select: none;
+}
+.phone-row input{ border-radius: 0 4px 4px 0 !important; }
+.phone-row input:focus{
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.12);
+}
 .field-hint{
-  font-size: 13px;
+  font-size: 12px;
   color: #ef4444;
-  margin-top: 6px;
+  margin-top: 5px;
   display: none;
   font-weight: 500;
 }
@@ -119,23 +143,24 @@ h2{
   border: none;
   cursor: pointer;
   color: var(--muted);
-  font-size: 16px;
+  font-size: 15px;
   padding: 0;
   transition: color 0.15s;
+  line-height: 1;
 }
 .pass-toggle:hover{ color: var(--green); }
 .banner{
   border-radius: 4px;
-  padding: 14px 16px;
+  padding: 13px 16px;
   font-size: 14px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   display: none;
   align-items: flex-start;
   gap: 12px;
   line-height: 1.5;
 }
-.banner i{ margin-top: 2px; flex-shrink: 0; font-size: 15px; }
-.banner-body strong{ display: block; font-weight: 700; margin-bottom: 3px; font-size: 14px; }
+.banner i{ margin-top: 1px; flex-shrink: 0; font-size: 15px; }
+.banner-body strong{ display: block; font-weight: 700; margin-bottom: 2px; font-size: 14px; }
 .error-banner{ background: #fef2f2; border-left: 4px solid #f87171; color: #b91c1c; }
 .success-banner{ background: #f0fdf4; border-left: 4px solid var(--green); color: #166534; }
 .btn-submit{
@@ -144,21 +169,21 @@ h2{
   color: #fff;
   font-family: 'Sora', sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   padding: 15px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.2s;
-  margin-top: 8px;
+  margin-top: 6px;
   letter-spacing: 0.04em;
 }
 .btn-submit:hover{ background: #111827; }
 .btn-submit:disabled{ opacity: 0.6; cursor: not-allowed; }
 .foot{
   text-align: center;
-  margin-top: 28px;
-  font-size: 15px;
+  margin-top: 24px;
+  font-size: 14px;
   color: var(--muted);
 }
 .foot a{
@@ -169,7 +194,7 @@ h2{
 .foot a:hover{ text-decoration: underline; }
 .spinner{
   display: inline-block;
-  width: 17px; height: 17px;
+  width: 16px; height: 16px;
   border: 2px solid rgba(255,255,255,0.3);
   border-top-color: #fff;
   border-radius: 50%;
@@ -178,9 +203,7 @@ h2{
   margin-right: 8px;
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
-@media(max-width: 560px){
-  .auth-box{ padding: 32px 20px; }
-}
+@media(max-width: 560px){ .auth-box{ padding: 32px 20px; } }
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition: background-color 0s 600000s, color 0s 600000s;
@@ -193,7 +216,7 @@ input:-webkit-autofill:focus {
 <div class="logo-area">
   <img src="07d3a4e2-8cf5-43b7-8c90-df4419da67de.jfif" alt="Kowri"
     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
-  <div class="logo-fallback" style="display:none;">
+  <div style="display:none; align-items:center; gap:10px;">
     <svg width="40" height="40" viewBox="0 0 36 36" fill="none">
       <defs>
         <radialGradient id="lg" cx="40%" cy="30%" r="70%">
@@ -229,22 +252,31 @@ input:-webkit-autofill:focus {
   </div>
 
   <div class="field">
-    <label for="fullName">Name</label>
-    <input type="text" id="fullName" placeholder="Enter your full name" autocomplete="name"/>
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" placeholder="e.g. Kwame Mensah" autocomplete="name" spellcheck="false"/>
     <div class="field-hint" id="hint-name">Please enter your full name</div>
   </div>
 
   <div class="field">
-    <label for="email">Email</label>
-    <input type="email" id="email" placeholder="Enter your email address" autocomplete="email"/>
+    <label for="email">Email Address</label>
+    <input type="email" id="email" placeholder="e.g. kwame@example.com" autocomplete="email" inputmode="email" spellcheck="false"/>
     <div class="field-hint" id="hint-email">Please enter a valid email address</div>
+  </div>
+
+  <div class="field">
+    <label for="phone">Phone Number <span class="opt">(optional)</span></label>
+    <div class="phone-row">
+      <span class="phone-prefix">🇬🇭 +233</span>
+      <input type="tel" id="phone" placeholder="24 123 4567" autocomplete="tel-national" inputmode="numeric" maxlength="10"/>
+    </div>
+    <div class="field-hint" id="hint-phone">Enter a valid Ghanaian phone number (9–10 digits)</div>
   </div>
 
   <div class="field">
     <label for="password">Password</label>
     <div class="pass-wrap">
-      <input type="password" id="password" placeholder="Minimum 6 characters" autocomplete="new-password"/>
-      <button type="button" class="pass-toggle" onclick="togglePass('password', this)" tabindex="-1">
+      <input type="password" id="password" placeholder="At least 6 characters" autocomplete="new-password"/>
+      <button type="button" class="pass-toggle" onclick="togglePass('password', this)" tabindex="-1" aria-label="Show/hide password">
         <i class="fa-regular fa-eye"></i>
       </button>
     </div>
@@ -254,8 +286,8 @@ input:-webkit-autofill:focus {
   <div class="field">
     <label for="confirmPassword">Confirm Password</label>
     <div class="pass-wrap">
-      <input type="password" id="confirmPassword" placeholder="Re-enter your password" autocomplete="off"/>
-      <button type="button" class="pass-toggle" onclick="togglePass('confirmPassword', this)" tabindex="-1">
+      <input type="password" id="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password"/>
+      <button type="button" class="pass-toggle" onclick="togglePass('confirmPassword', this)" tabindex="-1" aria-label="Show/hide confirm password">
         <i class="fa-regular fa-eye"></i>
       </button>
     </div>
@@ -263,21 +295,16 @@ input:-webkit-autofill:focus {
   </div>
 
   <button class="btn-submit" id="reg-btn" onclick="doRegister()">REGISTER</button>
-  <div class="foot">Already registered? <a href="signin.html">Sign In</a></div>
+
+  <div class="foot">Already have an account? <a href="signin.html">Sign In</a></div>
 </div>
 
 <script>
-const API = 'https://kowriwebbackend-h4uz.onrender.com';
-
-function generateUniquePhone() {
-  const ts = Date.now().toString().slice(-6);
-  const rand = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  return '+233' + ts + rand;
-}
+const API = 'http://localhost:8080';
 
 function togglePass(inputId, btn) {
   const input = document.getElementById(inputId);
-  const icon = btn.querySelector('i');
+  const icon  = btn.querySelector('i');
   if (input.type === 'password') {
     input.type = 'text';
     icon.classList.replace('fa-eye', 'fa-eye-slash');
@@ -289,7 +316,7 @@ function togglePass(inputId, btn) {
 
 function clearErrors() {
   document.getElementById('err-box').style.display = 'none';
-  ['fullName','email','password','confirmPassword'].forEach(id => {
+  ['fullName','email','phone','password','confirmPassword'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('input-error');
   });
@@ -305,7 +332,7 @@ function fieldError(inputId, hintId) {
 
 function showBanner(title, msg) {
   document.getElementById('err-title').textContent = title;
-  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('err-msg').textContent   = msg;
   const box = document.getElementById('err-box');
   box.style.display = 'flex';
   box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -313,13 +340,23 @@ function showBanner(title, msg) {
 
 function friendlyError(rawMsg) {
   const m = (rawMsg || '').toLowerCase();
-  if (m.includes('email') && (m.includes('exist') || m.includes('taken') || m.includes('already') || m.includes('registered')))
+  if (m.includes('email') && (m.includes('exist') || m.includes('taken') || m.includes('already') || m.includes('conflict')))
     return { title: 'Email already in use', msg: 'An account with this email already exists. Try signing in instead.' };
+  if (m.includes('phone') && (m.includes('exist') || m.includes('taken') || m.includes('already') || m.includes('conflict')))
+    return { title: 'Phone number already in use', msg: 'This phone number is registered to another account.' };
   if (m.includes('network') || m.includes('fetch') || m.includes('failed to fetch'))
     return { title: 'Connection issue', msg: 'Check your internet connection and try again.' };
   if (m.includes('server') || m.includes('500') || m.includes('internal'))
     return { title: 'Server error', msg: 'Something went wrong on our side. Please retry in a moment.' };
   return { title: 'Could not sign up', msg: rawMsg || 'Please review your details and try again.' };
+}
+
+function buildPhoneNumber(raw) {
+  const digits = raw.replace(/\D/g, '');
+  if (!digits) return null;
+  if (digits.startsWith('233')) return '+' + digits;
+  if (digits.startsWith('0'))   return '+233' + digits.slice(1);
+  return '+233' + digits;
 }
 
 async function doRegister() {
@@ -328,30 +365,40 @@ async function doRegister() {
 
   const fullName        = document.getElementById('fullName').value.trim();
   const email           = document.getElementById('email').value.trim();
+  const phoneRaw        = document.getElementById('phone').value.trim();
   const password        = document.getElementById('password').value;
   const confirmPassword = document.getElementById('confirmPassword').value;
 
+  const phoneDigits = phoneRaw.replace(/\D/g, '');
+  const phoneValid  = !phoneRaw || (phoneDigits.length >= 9 && phoneDigits.length <= 10);
+
   let hasError = false;
-  if (!fullName)                              { fieldError('fullName', 'hint-name'); hasError = true; }
+  if (!fullName)                                             { fieldError('fullName', 'hint-name'); hasError = true; }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { fieldError('email', 'hint-email'); hasError = true; }
-  if (!password || password.length < 6)       { fieldError('password', 'hint-password'); hasError = true; }
-  if (password !== confirmPassword)           { fieldError('confirmPassword', 'hint-confirm'); hasError = true; }
+  if (!phoneValid)                                           { fieldError('phone', 'hint-phone'); hasError = true; }
+  if (!password || password.length < 6)                     { fieldError('password', 'hint-password'); hasError = true; }
+  if (password !== confirmPassword)                         { fieldError('confirmPassword', 'hint-confirm'); hasError = true; }
 
   if (hasError) {
     showBanner('Please fix the fields below', 'Make sure all highlighted fields are filled correctly.');
     return;
   }
 
-  const phoneNumber = generateUniquePhone();
+  const payload = { fullName, email, password };
+  const phoneNumber = buildPhoneNumber(phoneRaw);
+  if (phoneNumber) payload.phoneNumber = phoneNumber;
+
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Creating account…';
 
   try {
-    const res = await fetch(`${API}/api/users/register`, {
+    // ✅ Updated endpoint
+    const res = await fetch(`${API}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fullName, email, password, confirmPassword, phoneNumber })
+      body: JSON.stringify(payload)
     });
+
     let data = {};
     try { data = await res.json(); } catch(_) {}
 
@@ -363,12 +410,13 @@ async function doRegister() {
       return;
     }
 
-    localStorage.setItem('kowri_token',   data.token);
-    localStorage.setItem('kowri_refresh', data.refreshToken);
-    localStorage.setItem('kowri_user',    JSON.stringify(data));
+    if (data.token)        localStorage.setItem('kowri_token',   data.token);
+    if (data.refreshToken) localStorage.setItem('kowri_refresh', data.refreshToken);
+    localStorage.setItem('kowri_user', JSON.stringify(data));
 
     document.getElementById('suc-box').style.display = 'flex';
     setTimeout(() => location.href = 'dashboard.html', 1600);
+
   } catch(e) {
     const { title, msg } = friendlyError(e.message);
     showBanner(title, msg);
@@ -377,8 +425,15 @@ async function doRegister() {
   }
 }
 
-document.addEventListener('keydown', e => { if(e.key === 'Enter') doRegister(); });
-window.addEventListener('load', () => { document.getElementById('fullName').focus(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.activeElement.tagName === 'INPUT') doRegister();
+});
+
+document.getElementById('phone').addEventListener('input', function() {
+  this.value = this.value.replace(/[^\d\s\-]/g, '');
+});
+
+window.addEventListener('load', () => document.getElementById('fullName').focus());
 </script>
 </body>
 </html>
