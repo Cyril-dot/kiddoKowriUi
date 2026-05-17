@@ -169,6 +169,17 @@ h2{
 .banner-body strong{ display: block; font-weight: 700; margin-bottom: 2px; font-size: 14px; }
 .error-banner{ background: #fef2f2; border-left: 4px solid #f87171; color: #b91c1c; }
 .success-banner{ background: #f0fdf4; border-left: 4px solid var(--green); color: #166534; }
+
+/* Debug box */
+.debug-box{
+  background:#1f2937;color:#86efac;font-family:monospace;font-size:12px;
+  padding:14px;border-radius:6px;margin-bottom:22px;
+  display:none;white-space:pre-wrap;word-break:break-all;line-height:1.6;
+  max-height:200px;overflow-y:auto;
+}
+.debug-box.show{display:block;}
+.debug-title{font-size:11px;font-weight:700;color:#fbbf24;margin-bottom:6px;}
+
 .btn-submit{
   width: 100%;
   background: #1f2937;
@@ -241,6 +252,12 @@ input:-webkit-autofill:focus {
   <h2>Welcome back</h2>
   <p class="sub">Sign in to your Kowri account</p>
 
+  <!-- DEBUG BOX: shows API response from last login attempt -->
+  <div class="debug-box" id="debug-box">
+    <div class="debug-title">🔍 Last API Response (debug)</div>
+    <div id="debug-content"></div>
+  </div>
+
   <div class="banner error-banner" id="err-box">
     <i class="fa-solid fa-circle-exclamation"></i>
     <div class="banner-body">
@@ -289,6 +306,17 @@ input:-webkit-autofill:focus {
 
 <script>
 const API = 'https://kowriwebbackend-production.up.railway.app';
+
+/* ── Show any saved debug data from a previous login attempt ── */
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('kowri_debug_response');
+  if (saved) {
+    document.getElementById('debug-content').textContent = saved;
+    document.getElementById('debug-box').classList.add('show');
+    // Don't auto-clear — user needs to read it
+  }
+  document.getElementById('email').focus();
+});
 
 function togglePass() {
   const input = document.getElementById('password');
@@ -340,6 +368,10 @@ async function doSignIn() {
   const btn = document.getElementById('si-btn');
   clearErrors();
 
+  // Clear previous debug log when trying again
+  localStorage.removeItem('kowri_debug_response');
+  document.getElementById('debug-box').classList.remove('show');
+
   const email    = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
   const remember = document.getElementById('remember').checked;
@@ -365,59 +397,70 @@ async function doSignIn() {
     let data = {};
     try { data = await res.json(); } catch(_) {}
 
+    // ── Save the FULL raw response to localStorage so it survives the redirect ──
+    const debugInfo = [
+      'HTTP Status : ' + res.status,
+      'Keys in response : ' + Object.keys(data).join(', '),
+      '',
+      'Full response:',
+      JSON.stringify(data, null, 2)
+    ].join('\n');
+    localStorage.setItem('kowri_debug_response', debugInfo);
+
     if (!res.ok) {
       const { title, msg } = friendlyError(data.message || data.error || `HTTP ${res.status}`);
       showError(title, msg);
       btn.disabled = false;
       btn.textContent = 'LOG IN';
+      // Show debug on page for failed logins
+      document.getElementById('debug-content').textContent = debugInfo;
+      document.getElementById('debug-box').classList.add('show');
       return;
     }
 
-    // ── DEBUG: log the full API response so we can see the exact field names ──
-    console.log('✅ Login API response:', JSON.stringify(data, null, 2));
-    console.log('🔑 Role field value:', data.role);
-    console.log('🔑 UserType field value:', data.userType);
-    console.log('🔑 Type field value:', data.type);
-    // ──────────────────────────────────────────────────────────────────────────
+    // Resolve role from whichever field the API uses
+    const rawRole = (
+      data.role       ||
+      data.userRole   ||
+      data.userType   ||
+      data.accountType||
+      data.type       ||
+      // also check one level deep inside a user/data object
+      data.user?.role ||
+      data.data?.role ||
+      ''
+    ).toUpperCase();
 
-    // Persist tokens — save everything to both stores so dashboard guards find it
+    // Persist tokens
     const store = remember ? localStorage : sessionStorage;
-    store.setItem('kowri_token',   data.token);
-    store.setItem('kowri_refresh', data.refreshToken);
+    store.setItem('kowri_token',   data.token   || data.accessToken || '');
+    store.setItem('kowri_refresh', data.refreshToken || '');
     store.setItem('kowri_user',    JSON.stringify(data));
 
-    // Always mirror into localStorage so any page can reliably read it
-    localStorage.setItem('kowri_token',   data.token);
-    localStorage.setItem('kowri_refresh', data.refreshToken);
+    // Always mirror into localStorage
+    localStorage.setItem('kowri_token',   data.token   || data.accessToken || '');
+    localStorage.setItem('kowri_refresh', data.refreshToken || '');
     localStorage.setItem('kowri_user',    JSON.stringify(data));
 
     document.getElementById('suc-box').style.display = 'flex';
 
-    // Resolve role from whichever field the API uses
-    const rawRole = (
-      data.role ||
-      data.userRole ||
-      data.userType ||
-      data.accountType ||
-      data.type ||
-      ''
-    ).toUpperCase();
-
-    console.log('➡️  Resolved role:', rawRole);
-
     const isAdmin = rawRole === 'ADMIN' || rawRole === 'SUPER_ADMIN';
     const dest    = isAdmin ? 'admin/admin-dashboard.html' : 'dashboard.html';
 
-    console.log('🚀 Redirecting to:', dest);
+    // Add resolved role to debug log
+    localStorage.setItem('kowri_debug_response',
+      debugInfo + '\n\nResolved role : ' + rawRole + '\nRedirecting to: ' + dest
+    );
 
-    // Use replace() so the login page is removed from browser history,
-    // preventing the back-button loop that sends admins back here.
     setTimeout(() => {
       window.location.replace(dest);
     }, 1500);
 
   } catch(e) {
-    console.error('❌ Login error:', e);
+    const errInfo = 'Fetch error: ' + e.message;
+    localStorage.setItem('kowri_debug_response', errInfo);
+    document.getElementById('debug-content').textContent = errInfo;
+    document.getElementById('debug-box').classList.add('show');
     const { title, msg } = friendlyError(e.message);
     showError(title, msg);
     btn.disabled = false;
@@ -428,8 +471,6 @@ async function doSignIn() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.activeElement.tagName === 'INPUT') doSignIn();
 });
-
-window.addEventListener('load', () => document.getElementById('email').focus());
 </script>
 </body>
 </html>
