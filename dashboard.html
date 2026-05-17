@@ -35,6 +35,10 @@ img{max-width:100%;}
   padding:0 32px;background:var(--card);border-bottom:1px solid var(--border);
   position:sticky;top:0;z-index:100;gap:16px;
 }
+/* On desktop, nav-row1 fills the full nav row */
+.nav-row1{
+  display:contents; /* children behave as direct children of .nav on desktop */
+}
 .nav-logo{
   display:flex;align-items:center;gap:8px;
   font-family:'Sora',sans-serif;font-weight:800;font-size:19px;
@@ -100,26 +104,28 @@ img{max-width:100%;}
 }
 .btn-logout:hover{border-color:var(--red);color:var(--red);}
 
-/* BOTTOM NAV — mobile only */
-.bottom-nav{
-  display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;
-  background:var(--card);border-top:1px solid var(--border);
-  height:var(--bottom-nav-h);
-  padding:0 8px env(safe-area-inset-bottom,0px);
+/* MOBILE TOP NAV TABS — shown inside the top nav on mobile */
+.mobile-nav-tabs{
+  display:none; /* hidden on desktop */
+  align-items:center;gap:2px;
+  overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+  flex:1;
 }
-.bottom-nav-inner{
-  display:flex;align-items:stretch;height:100%;gap:0;
-}
+.mobile-nav-tabs::-webkit-scrollbar{display:none;}
 .bn-tab{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;border:none;background:none;cursor:pointer;padding:8px 4px;
-  color:var(--muted);font-size:10px;font-weight:600;transition:color .18s;
-  border-radius:8px;
+  display:flex;align-items:center;gap:5px;
+  padding:7px 12px;border-radius:var(--radius-sm);
+  border:none;background:none;cursor:pointer;
+  color:var(--muted);font-size:13px;font-weight:600;
+  transition:all .18s;white-space:nowrap;flex-shrink:0;
 }
-.bn-tab.active{color:var(--green-dark);}
-.bn-tab i{font-size:18px;transition:transform .2s;}
-.bn-tab.active i{transform:scale(1.1);}
-.bn-tab.admin-bn-tab.active{color:var(--purple);}
+.bn-tab:hover{color:var(--text);background:var(--bg);}
+.bn-tab.active{color:var(--green-dark);background:var(--green-light);}
+.bn-tab i{font-size:14px;}
+.bn-tab.admin-bn-tab.active{color:var(--purple);background:var(--purple-light);}
+
+/* Hide old bottom nav completely */
+.bottom-nav{display:none!important;}
 
 /* PAGES */
 .page{display:none;}
@@ -458,24 +464,35 @@ img{max-width:100%;}
 
 /* ═══════════════════════════════════════════
    RESPONSIVE — 768px
-   KEY FIX: hide notif bell, logout from top nav on mobile
-   since they live in the bottom nav instead
+   Nav tabs appear IN the top nav bar on mobile.
+   Two-row nav: logo row + scrollable tabs row.
 ═══════════════════════════════════════════ */
 @media(max-width:768px){
-  .nav{padding:0 16px;gap:10px;}
-  .nav-tabs{display:none;}
+  /* Two-row top nav on mobile */
+  .nav{
+    padding:0;gap:0;height:auto;
+    flex-direction:column;align-items:stretch;
+  }
+  .nav-row1{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 14px;height:52px;flex-shrink:0;
+  }
+  .nav-tabs{display:none;}           /* hide desktop center tabs */
   .nav-name-wrap{display:none;}
-  
-  /* HIDE these from top nav on mobile — they're in the bottom nav */
   .notif-bell-btn{display:none;}
   .btn-logout{display:none;}
-  
-  /* Only show avatar in top right on mobile */
   .nav-right{gap:6px;}
 
-  .bottom-nav{display:flex;}
-  .page-wrap{padding:18px 14px calc(var(--bottom-nav-h) + 24px);}
-  .admin-wrap{padding:18px 14px calc(var(--bottom-nav-h) + 24px);}
+  /* Show the mobile tab row inside the nav */
+  .mobile-nav-tabs{
+    display:flex;
+    padding:0 10px 8px;
+    border-top:1px solid var(--border-soft);
+    gap:2px;
+  }
+
+  .page-wrap{padding:16px 14px 28px;}
+  .admin-wrap{padding:16px 14px 28px;}
 
   .balance-hero{padding:24px 22px;}
   .bal-amount{font-size:36px;}
@@ -493,8 +510,7 @@ img{max-width:100%;}
 
   .notif-panel{
     top:0;width:100%;height:100vh;
-    border-radius:0;border-left:none;
-    border-top:none;
+    border-radius:0;border-left:none;border-top:none;
   }
 
   .admin-stat-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
@@ -507,10 +523,8 @@ img{max-width:100%;}
   }
 
   .search-wrap input{width:120px;}
-
   .screenshot-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:12px;}
-
-  .toast{bottom:calc(16px + var(--bottom-nav-h));right:14px;left:14px;}
+  .toast{bottom:20px;right:14px;left:14px;}
 }
 
 @media(max-width:480px){
@@ -588,59 +602,54 @@ img{max-width:100%;}
 
 <!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">
-    <div class="logo-dot">K</div>
-    kowri
-  </div>
-
-  <!-- Desktop tabs -->
-  <div class="nav-tabs">
-    <button class="nav-tab active" id="tab-user" onclick="showPage('user',this)">
-      <i class="fa-solid fa-grid-2"></i> <span>Dashboard</span>
-    </button>
-    <button class="nav-tab admin-tab" id="tab-admin" style="display:none" onclick="showPage('admin',this)">
-      <i class="fa-solid fa-shield-halved"></i> <span>Admin</span>
-    </button>
-  </div>
-
-  <div class="nav-right">
-    <!-- Bell & logout visible on desktop only (hidden on mobile via CSS) -->
-    <button class="notif-bell-btn" id="notif-bell" onclick="toggleNotifPanel()" title="Notifications">
-      <i class="fa-solid fa-bell"></i>
-      <span class="bell-badge" id="bell-badge"></span>
-    </button>
-    <div class="nav-user">
-      <div class="nav-avatar" id="nav-avatar">U</div>
-      <div class="nav-name-wrap">
-        <span class="nav-name" id="nav-name">Account</span>
-        <span class="role-chip" id="nav-role-chip"></span>
-      </div>
+  <!-- Row 1: logo + avatar (both desktop & mobile) -->
+  <div class="nav-row1">
+    <div class="nav-logo">
+      <div class="logo-dot">K</div>
+      kowri
     </div>
-    <button class="btn-logout" onclick="logout()">
-      <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Logout</span>
-    </button>
-  </div>
-</nav>
 
-<!-- BOTTOM NAV — mobile -->
-<nav class="bottom-nav" id="bottom-nav">
-  <div class="bottom-nav-inner">
+    <!-- Desktop center tabs -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-user" onclick="showPage('user',this)">
+        <i class="fa-solid fa-grid-2"></i> <span>Dashboard</span>
+      </button>
+      <button class="nav-tab admin-tab" id="tab-admin" style="display:none" onclick="showPage('admin',this)">
+        <i class="fa-solid fa-shield-halved"></i> <span>Admin</span>
+      </button>
+    </div>
+
+    <div class="nav-right">
+      <button class="notif-bell-btn" id="notif-bell" onclick="toggleNotifPanel()" title="Notifications">
+        <i class="fa-solid fa-bell"></i>
+        <span class="bell-badge" id="bell-badge"></span>
+      </button>
+      <div class="nav-user">
+        <div class="nav-avatar" id="nav-avatar">U</div>
+        <div class="nav-name-wrap">
+          <span class="nav-name" id="nav-name">Account</span>
+          <span class="role-chip" id="nav-role-chip"></span>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Logout</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Row 2: mobile-only tab bar (sits inside the nav, below the logo row) -->
+  <div class="mobile-nav-tabs">
     <button class="bn-tab active" id="bn-user" onclick="showPage('user', document.getElementById('tab-user')); setBottomTab('bn-user')">
-      <i class="fa-solid fa-grid-2"></i>
-      <span>Dashboard</span>
+      <i class="fa-solid fa-grid-2"></i> Dashboard
     </button>
     <button class="bn-tab" id="bn-notif" onclick="toggleNotifPanel(); setBottomTab('bn-notif')">
-      <i class="fa-solid fa-bell"></i>
-      <span>Alerts</span>
-      <span class="bell-badge" id="bell-badge-mobile" style="position:relative;top:auto;right:auto;display:none;width:8px;height:8px;background:var(--red);border-radius:50%;margin-top:-16px;margin-left:2px;"></span>
+      <i class="fa-solid fa-bell"></i> Alerts
     </button>
     <button class="bn-tab admin-bn-tab" id="bn-admin" style="display:none" onclick="showPage('admin', document.getElementById('tab-admin')); setBottomTab('bn-admin')">
-      <i class="fa-solid fa-shield-halved"></i>
-      <span>Admin</span>
+      <i class="fa-solid fa-shield-halved"></i> Admin
     </button>
     <button class="bn-tab" id="bn-logout" onclick="logout()">
-      <i class="fa-solid fa-arrow-right-from-bracket"></i>
-      <span>Logout</span>
+      <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
     </button>
   </div>
 </nav>
@@ -1114,16 +1123,8 @@ async function loadUserNotifs(){
     userNotifs = nRes.ok ? await nRes.json() : [];
     const countData = cRes.ok ? await cRes.json() : {unreadCount:0};
     const unread = countData.unreadCount || 0;
-    // Update both desktop and mobile badges
     const badge = document.getElementById('bell-badge');
-    const badgeMobile = document.getElementById('bell-badge-mobile');
-    if(unread > 0){
-      badge.classList.add('show');
-      if(badgeMobile) badgeMobile.style.display = 'block';
-    } else {
-      badge.classList.remove('show');
-      if(badgeMobile) badgeMobile.style.display = 'none';
-    }
+    unread > 0 ? badge.classList.add('show') : badge.classList.remove('show');
     renderNotifPanel();
   } catch(e){ /* silent */ }
 }
@@ -1172,14 +1173,7 @@ async function markRead(notifId){
     renderNotifPanel();
     const unread = userNotifs.filter(x=>!x.read).length;
     const badge = document.getElementById('bell-badge');
-    const badgeMobile = document.getElementById('bell-badge-mobile');
-    if(unread > 0){
-      badge.classList.add('show');
-      if(badgeMobile) badgeMobile.style.display = 'block';
-    } else {
-      badge.classList.remove('show');
-      if(badgeMobile) badgeMobile.style.display = 'none';
-    }
+    unread > 0 ? badge.classList.add('show') : badge.classList.remove('show');
   } catch(e){ /* silent */ }
 }
 
@@ -1190,8 +1184,6 @@ async function markAllRead(){
     });
     userNotifs.forEach(n=>{ n.read=true; n.readAt=new Date().toISOString(); });
     document.getElementById('bell-badge').classList.remove('show');
-    const badgeMobile = document.getElementById('bell-badge-mobile');
-    if(badgeMobile) badgeMobile.style.display = 'none';
     renderNotifPanel();
     toast('All notifications marked as read');
   } catch(e){ toast('Failed to mark all read','error'); }
