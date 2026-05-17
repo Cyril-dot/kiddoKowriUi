@@ -356,7 +356,6 @@ async function doSignIn() {
   btn.innerHTML = '<span class="spinner"></span> Signing in…';
 
   try {
-    // ✅ Single unified endpoint for all users
     const res = await fetch(`${API}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -374,29 +373,51 @@ async function doSignIn() {
       return;
     }
 
-    // Persist tokens
+    // ── DEBUG: log the full API response so we can see the exact field names ──
+    console.log('✅ Login API response:', JSON.stringify(data, null, 2));
+    console.log('🔑 Role field value:', data.role);
+    console.log('🔑 UserType field value:', data.userType);
+    console.log('🔑 Type field value:', data.type);
+    // ──────────────────────────────────────────────────────────────────────────
+
+    // Persist tokens — save everything to both stores so dashboard guards find it
     const store = remember ? localStorage : sessionStorage;
     store.setItem('kowri_token',   data.token);
     store.setItem('kowri_refresh', data.refreshToken);
     store.setItem('kowri_user',    JSON.stringify(data));
 
-    // Always keep in localStorage so other pages can read it
-    localStorage.setItem('kowri_token', data.token);
-    localStorage.setItem('kowri_user',  JSON.stringify(data));
+    // Always mirror into localStorage so any page can reliably read it
+    localStorage.setItem('kowri_token',   data.token);
+    localStorage.setItem('kowri_refresh', data.refreshToken);
+    localStorage.setItem('kowri_user',    JSON.stringify(data));
 
     document.getElementById('suc-box').style.display = 'flex';
 
-    // ✅ Redirect based on role returned by the API
+    // Resolve role from whichever field the API uses
+    const rawRole = (
+      data.role ||
+      data.userRole ||
+      data.userType ||
+      data.accountType ||
+      data.type ||
+      ''
+    ).toUpperCase();
+
+    console.log('➡️  Resolved role:', rawRole);
+
+    const isAdmin = rawRole === 'ADMIN' || rawRole === 'SUPER_ADMIN';
+    const dest    = isAdmin ? 'admin/admin-dashboard.html' : 'dashboard.html';
+
+    console.log('🚀 Redirecting to:', dest);
+
+    // Use replace() so the login page is removed from browser history,
+    // preventing the back-button loop that sends admins back here.
     setTimeout(() => {
-      const role = (data.role || '').toUpperCase();
-      if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-        location.href = 'admin/admin-dashboard.html';
-      } else {
-        location.href = 'dashboard.html';
-      }
-    }, 1200);
+      window.location.replace(dest);
+    }, 1500);
 
   } catch(e) {
+    console.error('❌ Login error:', e);
     const { title, msg } = friendlyError(e.message);
     showError(title, msg);
     btn.disabled = false;
