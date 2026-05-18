@@ -84,7 +84,7 @@ button{font-family:'DM Sans',sans-serif;cursor:pointer;}
 .tier-card{
   background:var(--card);border:2px solid var(--border);border-radius:var(--radius);
   padding:18px 10px 14px;text-align:center;transition:all .2s;
-  position:relative;overflow:hidden;
+  position:relative;overflow:hidden;cursor:pointer;
 }
 .tier-card:hover{border-color:var(--green);transform:translateY(-1px);box-shadow:0 4px 16px rgba(34,197,94,.15);}
 .tier-card.selected{border-color:var(--green-dark);background:var(--green-light);}
@@ -527,20 +527,26 @@ async function doDeposit(){
   btn.disabled=true;
   btn.innerHTML='<span class="spinner"></span> Submitting…';
 
-  const formData=new FormData();
-  formData.append('depositType',  'FIXED');
-  formData.append('amount',       actualAmount);
-  formData.append('rewardAmount', selectedTier.reward);
-  formData.append('tokenId',      tokenId);
-  formData.append('secretCode',   secretCode);
-  formData.append('walletId',     walletId);
-  formData.append('proofImage',   proofFile);
-  formData.append('tierAmount',   selectedTier.amount);
-  formData.append('depositMode',  depositMode);
-  if(depositMode==='topup') formData.append('previousAmount', currentDeposit);
+  // Build the JSON data blob that matches @RequestPart("data") DepositRequest
+  const requestData = {
+    depositType:    'FIXED',
+    amount:         actualAmount,
+    rewardAmount:   selectedTier.reward,
+    tokenId:        tokenId,
+    secretCode:     secretCode,
+    walletId:       walletId,
+    tierAmount:     selectedTier.amount,
+    depositMode:    depositMode,
+    previousAmount: depositMode === 'topup' ? currentDeposit : null
+  };
+
+  const formData = new FormData();
+  formData.append('data',  new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
+  formData.append('proof', proofFile);
 
   try {
-    const res=await fetch(`${API}/api/deposits/${uid()}/submit`,{
+    // Correct endpoint: POST /api/users/{userId}/deposits
+    const res=await fetch(`${API}/api/users/${uid()}/deposits`,{
       method:'POST',
       headers:{ Authorization:`Bearer ${tok()}` },
       body:formData
