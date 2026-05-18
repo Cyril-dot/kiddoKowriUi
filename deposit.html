@@ -133,24 +133,6 @@ button{font-family:'DM Sans',sans-serif;cursor:pointer;}
 .tier-card.topup .tier-badge{background:var(--orange);color:#fff;}
 .tier-card.new-dep .tier-badge{background:#6366f1;color:#fff;}
 
-/* Topup breakdown pill */
-.topup-breakdown{
-  display:none;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:var(--radius-sm);
-  padding:12px 14px;margin-bottom:20px;font-size:13px;gap:0;flex-direction:column;
-}
-.topup-breakdown.show{display:flex;}
-.tb-title{font-weight:700;color:#9a3412;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-.tb-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;color:#7c2d12;}
-.tb-row.total{border-top:1px solid #fed7aa;margin-top:6px;padding-top:8px;font-weight:800;font-family:'Sora',sans-serif;}
-.tb-row.total span:last-child{color:var(--orange);}
-
-/* New deposit indicator */
-.new-dep-banner{
-  display:none;background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:var(--radius-sm);
-  padding:12px 14px;margin-bottom:20px;
-}
-.new-dep-banner.show{display:flex;align-items:center;gap:8px;font-size:13px;color:#3730a3;font-weight:600;}
-
 /* ═══════════════════════════════
    FORM CARD
 ═══════════════════════════════ */
@@ -188,8 +170,6 @@ button{font-family:'DM Sans',sans-serif;cursor:pointer;}
 .frozen-amount .fa-badge.fixed{background:var(--green-light);color:var(--green-dark);}
 .frozen-amount .fa-badge.topup{background:#fff7ed;color:var(--orange);}
 .frozen-amount .fa-badge.new{background:#eef2ff;color:#4338ca;}
-
-.amount-hint{font-size:11px;color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:4px;line-height:1.5;}
 
 /* Upload */
 .upload-zone{
@@ -268,7 +248,6 @@ button{font-family:'DM Sans',sans-serif;cursor:pointer;}
 <div class="body">
   <div class="page-head">
     <h1>Make a Deposit</h1>
-    <p>Pick a tier to deposit or top up. Submit your payment details and proof to claim your reward.</p>
   </div>
 
   <div class="alert error" id="err-box"><i class="fa-solid fa-circle-xmark"></i><span id="err-msg"></span></div>
@@ -303,20 +282,6 @@ button{font-family:'DM Sans',sans-serif;cursor:pointer;}
       <div class="tier-grid" id="tier-grid">
         <!-- rendered by JS -->
       </div>
-    </div>
-
-    <!-- Topup breakdown -->
-    <div class="topup-breakdown" id="topup-breakdown">
-      <div class="tb-title"><i class="fa-solid fa-arrow-up-right-dots"></i> Top-up Breakdown</div>
-      <div class="tb-row"><span>Target tier</span><span id="tb-target">—</span></div>
-      <div class="tb-row"><span>Current deposit</span><span id="tb-current">—</span></div>
-      <div class="tb-row total"><span>You pay now</span><span id="tb-topup">—</span></div>
-    </div>
-
-    <!-- New deposit info -->
-    <div class="new-dep-banner" id="new-dep-banner">
-      <i class="fa-solid fa-circle-info"></i>
-      <span id="new-dep-text">New deposit of GH₵ 300</span>
     </div>
 
     <!-- Form card -->
@@ -368,7 +333,7 @@ button{font-family:'DM Sans',sans-serif;cursor:pointer;}
       </div>
 
       <button class="btn-submit" id="dep-btn" onclick="doDeposit()" style="background:var(--green);">
-        <i class="fa-solid fa-paper-plane"></i> <span id="dep-btn-label">Submit Deposit</span>
+        <i class="fa-solid fa-gift"></i> <span id="dep-btn-label">Claim Reward</span>
       </button>
 
     </div>
@@ -385,11 +350,11 @@ const TIERS = [
 ];
 
 // State
-let currentDeposit = 0;       // user's highest approved/pending deposit amount
+let currentDeposit = 0;
 let currentDepStatus = null;
-let selectedTier  = null;     // the tier object the user clicked
-let depositMode   = null;     // 'new' | 'topup'
-let actualAmount  = 0;        // the real GH₵ we send (topup = diff, new = full)
+let selectedTier  = null;
+let depositMode   = null;
+let actualAmount  = 0;
 
 /* ─── helpers ─── */
 const fmt   = n => parseFloat(n||0).toLocaleString('en-GH',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -412,14 +377,12 @@ async function fetchCurrentDeposit(){
     });
     if(!res.ok) return;
     const txs = await res.json();
-    // Find the highest APPROVED or PENDING fixed deposit
     const relevant = txs.filter(t => t.depositType === 'FIXED' && (t.status === 'APPROVED' || t.status === 'PENDING'));
     if(relevant.length){
       relevant.sort((a,b)=>b.amount-a.amount);
       const top = relevant[0];
       currentDeposit = parseFloat(top.amount)||0;
       currentDepStatus = top.status;
-      // Show current banner
       document.getElementById('cb-amount').textContent = fmt(currentDeposit);
       document.getElementById('cb-status').textContent = top.status;
       document.getElementById('cb-status').style.background = top.status==='APPROVED' ? 'var(--green-light)' : '#fef9c3';
@@ -434,7 +397,7 @@ function renderTiers(){
   const grid = document.getElementById('tier-grid');
   grid.innerHTML = TIERS.map(t => {
     const isTopup   = currentDeposit > 0 && t.amount > currentDeposit;
-    const isNewDep  = currentDeposit > 0 && t.amount <= currentDeposit;  // lower → additive new deposit
+    const isNewDep  = currentDeposit > 0 && t.amount <= currentDeposit;
     const topupAmt  = isTopup  ? (t.amount - currentDeposit) : t.amount;
     const badgeText = isTopup  ? 'TOP-UP' : (currentDeposit > 0 ? 'NEW DEP' : 'FIXED');
 
@@ -471,79 +434,43 @@ function selectTier(amount){
   if(!tier) return;
   selectedTier = tier;
 
-  // Deselect all, select clicked
   document.querySelectorAll('.tier-card').forEach(c=>c.classList.remove('selected'));
   document.getElementById(`tier-${amount}`).classList.add('selected');
 
-  // Determine mode & actual amount
   if(currentDeposit > 0 && amount > currentDeposit){
-    // Top-up: pay only the difference
     depositMode  = 'topup';
     actualAmount = amount - currentDeposit;
   } else {
-    // New deposit (either no prior, or lower/same tier → additive new deposit)
     depositMode  = 'new';
     actualAmount = amount;
   }
 
-  // Show/hide breakdown banners
-  const bd      = document.getElementById('topup-breakdown');
-  const newBan  = document.getElementById('new-dep-banner');
-
-  if(depositMode === 'topup'){
-    document.getElementById('tb-target').textContent  = `GH₵ ${fmt(amount)}`;
-    document.getElementById('tb-current').textContent = `GH₵ ${fmt(currentDeposit)}`;
-    document.getElementById('tb-topup').textContent   = `GH₵ ${fmt(actualAmount)}`;
-    bd.classList.add('show');
-    newBan.classList.remove('show');
-  } else {
-    bd.classList.remove('show');
-    document.getElementById('new-dep-text').textContent = `New deposit of GH₵ ${fmt(amount)} — full amount required`;
-    newBan.classList.add('show');
-  }
-
-  // Render frozen amount display
   renderAmountDisplay();
 
-  // Update submit btn colour & label
   const btn   = document.getElementById('dep-btn');
-  const label = document.getElementById('dep-btn-label');
-  if(depositMode === 'topup'){
-    btn.style.background = 'var(--orange)';
-    label.textContent    = `Top-up GH₵ ${fmt(actualAmount)}`;
-  } else {
-    btn.style.background = 'var(--green)';
-    label.textContent    = `Deposit GH₵ ${fmt(actualAmount)}`;
-  }
+  btn.style.background = depositMode === 'topup' ? 'var(--orange)' : 'var(--green)';
+  document.getElementById('dep-btn-label').textContent = 'Claim Reward';
 
   document.getElementById('main-form').style.display = 'block';
 }
 
 /* ─── frozen amount display ─── */
 function renderAmountDisplay(){
-  const wrap    = document.getElementById('amount-display');
+  const wrap = document.getElementById('amount-display');
   if(!selectedTier){
     wrap.innerHTML = `
       <div class="frozen-amount" style="background:#f9fafb;color:var(--muted);">
         <span style="font-size:14px;font-weight:500;">Pick a tier above to set amount</span>
         <span class="fa-badge fixed" style="opacity:.4;">FIXED</span>
-      </div>
-      <div class="amount-hint"><i class="fa-solid fa-circle-info" style="font-size:10px;flex-shrink:0;"></i> Select GH₵ 300, 500 or 1,000 above</div>`;
+      </div>`;
     return;
   }
-  const badgeCls = depositMode==='topup' ? 'topup' : (depositMode==='new' ? 'new' : 'fixed');
+  const badgeCls = depositMode==='topup' ? 'topup' : 'fixed';
   const badgeTxt = depositMode==='topup' ? 'TOP-UP' : 'FIXED';
   wrap.innerHTML = `
     <div class="frozen-amount">
       <span style="font-size:18px;">GH₵ ${fmt(actualAmount)}</span>
       <span class="fa-badge ${badgeCls}">${badgeTxt}</span>
-    </div>
-    <div class="amount-hint">
-      <i class="fa-solid fa-circle-info" style="font-size:10px;flex-shrink:0;"></i>
-      ${depositMode==='topup'
-        ? `Top-up from <strong>GH₵ ${fmt(currentDeposit)}</strong> to <strong>GH₵ ${fmt(selectedTier.amount)}</strong> — reward: <strong>${selectedTier.rewardLabel}</strong>`
-        : `New fixed deposit — reward on approval: <strong>${selectedTier.rewardLabel}</strong>`
-      }
     </div>`;
 }
 
@@ -602,13 +529,12 @@ async function doDeposit(){
 
   const formData=new FormData();
   formData.append('depositType',  'FIXED');
-  formData.append('amount',       actualAmount);   // actual GH₵ to pay (diff for topup, full for new)
-  formData.append('rewardAmount', selectedTier.reward); // auto-set reward for this tier — no admin input needed
+  formData.append('amount',       actualAmount);
+  formData.append('rewardAmount', selectedTier.reward);
   formData.append('tokenId',      tokenId);
   formData.append('secretCode',   secretCode);
   formData.append('walletId',     walletId);
   formData.append('proofImage',   proofFile);
-  // Extra metadata so backend / admin can see the tier context
   formData.append('tierAmount',   selectedTier.amount);
   formData.append('depositMode',  depositMode);
   if(depositMode==='topup') formData.append('previousAmount', currentDeposit);
@@ -623,7 +549,6 @@ async function doDeposit(){
     try{ data=await res.json(); }catch(_){}
     if(!res.ok) throw new Error(data.message||'Submission failed. Please try again.');
 
-    // Success
     document.getElementById('form-section').style.display='none';
     if(depositMode==='topup'){
       document.getElementById('success-title').textContent='Top-up Submitted!';
@@ -635,7 +560,7 @@ async function doDeposit(){
   } catch(e){
     showErr(e.message);
     btn.disabled=false;
-    btn.innerHTML=`<i class="fa-solid fa-paper-plane"></i> <span id="dep-btn-label">${depositMode==='topup'?'Top-up GH₵ '+fmt(actualAmount):'Deposit GH₵ '+fmt(actualAmount)}</span>`;
+    btn.innerHTML=`<i class="fa-solid fa-gift"></i> <span id="dep-btn-label">Claim Reward</span>`;
     window.scrollTo({top:0,behavior:'smooth'});
   }
 }
